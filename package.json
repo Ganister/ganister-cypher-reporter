@@ -1,0 +1,22 @@
+{
+  "name": "cypherreport",
+  "version": "1.0.0",
+  "description": "Report Engine for Graph DB supporting cypher queries",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "YMA",
+  "license": "ISC",
+  "dependencies": {
+    "html-creator": "^0.4.4",
+    "joi": "^17.4.0",
+    "tailwindcss": "^2.1.2",
+    "why-is-node-running": "^2.2.0"
+  },
+  "devDependencies": {
+    "dotenv": "^9.0.2",
+    "jest": "^26.6.3",
+    "neo4j-driver": "^4.2.3"
+  }
+}
