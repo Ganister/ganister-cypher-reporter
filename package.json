@@ -1,6 +1,6 @@
 {
   "name": "cypherreport",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Report Engine for Graph DB supporting cypher queries",
   "main": "index.js",
   "scripts": {
@@ -11,8 +11,7 @@
   "dependencies": {
     "html-creator": "^0.4.4",
     "joi": "^17.4.0",
-    "tailwindcss": "^2.1.2",
-    "why-is-node-running": "^2.2.0"
+    "tailwindcss": "^2.1.2"
   },
   "devDependencies": {
     "dotenv": "^9.0.2",
