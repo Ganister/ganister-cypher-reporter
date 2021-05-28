@@ -30,42 +30,38 @@ const template = {
       title: 'Test A Value'
     },
     {
-      id: 2,
-      type: 'container',
+      id: 3,
+      type: 'field',
+      mapping: 'partCount',
+      width: '6',
+      title: 'Test C Value'
+    },
+    {
+      id: 4,
+      type: 'field',
+      mapping: 'partCount',
+      width: '6',
+      title: 'Test D Value'
+    },
+    {
+      id: 5,
+      type: 'table',
+      mapping: 'documents',
       width: '12',
-      items: [
+      title: 'Test D Value',
+      columns: [
         {
-          id: 3,
-          type: 'field',
-          mapping: 'a',
-          width: '6',
-          title: 'Test C Value'
+          field: 'properties._ref',
+          label: 'Reference',
         },
         {
-          id: 4,
-          type: 'field',
-          mapping: 'b',
-          width: '6',
-          title: 'Test D Value'
+          field: 'properties.name',
+          label: 'Name',
         },
         {
-          id: 5,
-          type: 'table',
-          mapping: 'documents',
-          width: '12',
-          title: 'Test D Value',
-          columns: [
-            {
-              field: 'properties._ref',
-            },
-            {
-              field: 'properties.name',
-            },
-            {
-              field: 'properties._createdByName',
-            },
-          ]
-        }
+          field: 'properties._createdByName',
+          label: 'Created By',
+        },
       ]
     }
   ]

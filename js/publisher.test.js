@@ -26,7 +26,7 @@ const template = {
         {
           id: 4,
           type: 'field',
-          mapping: 'b',
+          mapping: 'a',
           width: '6',
           title: 'Test D Value'
         },
@@ -39,12 +39,15 @@ const template = {
           columns: [
             {
               field: 'properties._ref',
+              label: 'Reference',
             },
             {
               field: 'properties.name',
+              label: 'Name',
             },
             {
               field: 'properties._createdByName',
+              label: 'Created By',
             },
           ]
         }
