@@ -6,7 +6,16 @@ const publisher = require('./js/publisher');
 
 const optionsSchema = Joi.object({
   queries: Joi.array(),
-  template: Joi.object(),
+  template: Joi.object({
+    name: Joi.string(),
+    items: Joi.array().items(Joi.object({
+      id: Joi.number(),
+      type: Joi.string().allow('field', 'table', 'graph'),
+      mapping: Joi.string(),
+      width: Joi.string().allow('1', '2', '3', '4', '5', '6'),
+      title: Joi.string(),
+    })),
+  }),
   output: Joi.string().allow('pdf', 'html'),
   cypherDriver: Joi.object(),
 });
