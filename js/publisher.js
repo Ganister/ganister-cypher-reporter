@@ -25,32 +25,45 @@ async function produce(dataStore, template) {
         { type: 'link', attributes: { href: 'https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css', rel: 'stylesheet' } },
         {
           type: 'style', content: `  
-        @page {
-          size: A4;
+   
+        .td {
+          padding: 4px 2px;
         }
-    
-        @page {
-          size: 5.5in 8.5in;
+
+        .td > .tr:last-child {
+          border-bottom: none;
         }
-    
-        @page :left {
-          margin-left: 3cm;
+        .tr {
+          display: flex; 
+          flex-direction: row;
+          flex-wrap: nowrap;
+          align-items: center; 
+          min-height: 23px;
+          border-bottom: solid 1px #EEE;
         }
-    
-        @page :right {
-          margin-left: 4cm;
+        .th {
+          font-weight: bold;
+          padding: 8px 4px;
         }
     
         .reportPage {
           padding: 10px 50px;
-          border: solid 1px #333;
-          box-shadow: 0px 0px 12px 3px #aaa;
         }
         #reportHeader{
           padding-bottom: 20px;
         }
         td,th{
           padding: 7px 5px;
+        }
+
+        .dataField {
+          background-color: #e6f4ff;
+          padding: 10px;
+          border-radius: 10px;
+          border: solid 1px #BBB;
+        }
+        h2{
+          margin:0rem 0 1.424rem 0 !important;
         }
         `}
       ]
@@ -78,12 +91,12 @@ async function produce(dataStore, template) {
       body.content.push(buildReportBlock(item, dataStore));
     });
   }
-  const mainDataContent= {
+  const mainDataContent = {
     type: 'div',
     attributes: {
       class: 'row',
     },
-    content:[],
+    content: [],
   };
   mainDataContent.content.push(body);
   htmlCreatorContent.push(mainDataContent);
@@ -96,12 +109,60 @@ async function produce(dataStore, template) {
 };
 
 
+/**
+ * 
+ * @param {*} dataStore 
+ */
+function convertStoreToTableRows(dataStoreElement, templateBlock) {
+  const tableRows = [];
+  const { nodes, edges } = dataStoreElement;
+
+  // retrieve root elements 
+  const rootElements = { ...nodes };
+  edges.forEach((edge) => {
+    delete rootElements[edge.target];
+  });
 
 
+  const rowRecursiveHandler = (rootElement, nodes, edges, level = 0, templateBlock) => {
 
+    level++;
+    rootElement.children = [];
+    rootElement._level = level;
+    delete rootElement.properties._promotions;
+    delete rootElement.properties._history;
+    tableRows.push(rootElement);
+    // handle inline relationships
+    edges
+      .filter((edge) => edge.source === rootElement.identity)
+      .filter((edge) => templateBlock.inlineRelationships.indexOf(edge.label) > -1)
+      .forEach((edge) => {
+        // console.log("LOG / file: publisher.js / line 120 / .forEach / edge", edge);
+        rootElement.children.push({
+          edge,
+          node: nodes[edge.target]
+        });
+      });
 
+    // handle subline relationships
+    edges
+      .filter((edge) => edge.source === rootElement.identity)
+      .filter((edge) => templateBlock.inlineRelationships.indexOf(edge.label) < 0)
+      .forEach((edge) => {
+        // console.log("LOG / file: publisher.js / line 132 / .forEach / edge", edge);
+        const subElement = nodes[edge.target];
+        rowRecursiveHandler(subElement, nodes, edges, level, templateBlock);
+      });
+  }
 
+  for (const [key, value] of Object.entries(rootElements)) {
+    rowRecursiveHandler(value, nodes, edges, 0, templateBlock);
+  }
 
+  // console.log("LOG / file: publisher.js / line 114 / rowRecursiveHandler / tableRows", JSON.stringify(tableRows));
+
+  return tableRows;
+}
 
 
 
@@ -115,42 +176,102 @@ function buildReportTable(templateBlock, dataStore) {
   const tableBlockContent = [];
   // Add Headers
   const headerBlock = {
-    type: 'tr',
-    attributes: { class: '' },
+    type: 'div',
+    attributes: { class: 'tr' },
     content: [],
   };
   if (templateBlock.columns) {
     templateBlock.columns.forEach((col) => {
-      headerBlock.content.push({
-        type: 'th',
-        attributes: { class: '' },
-        content: col.label,
-      });
+      if (col.fields) {
+        headerBlock.content.push({
+          type: 'div',
+          attributes: { class: 'th', style: `width:${col.width}px;min-width:${col.width}px;` },
+          content: col.label,
+        });
+      }
+      if (col.columns) {
+        col.columns.forEach((subCol) => {
+          headerBlock.content.push({
+            type: 'div',
+            attributes: { class: 'th', style: `width:${subCol.width}px;min-width:${subCol.width}px;` },
+            content: subCol.label,
+          });
+        })
+      }
     });
   }
   tableBlockContent.push(headerBlock);
 
   // Add Data
-  const data = dataStore[templateBlock.mapping];
-  if (data) {
-    data.forEach((row) => {
+  const tableRows = convertStoreToTableRows(dataStore[templateBlock.mapping], templateBlock);
+  if (tableRows) {
+    tableRows.forEach((tableRow) => {
       const rowBlock = {
-        type: 'tr',
-        attributes: { class: '' },
+        type: 'div',
+        attributes: { class: 'tr', id: tableRow.identity },
         content: [],
       };
       if (templateBlock.columns) {
         templateBlock.columns.forEach((col) => {
-          rowBlock.content.push({
-            type: 'td',
-            attributes: { class: '' },
-            content: getMappedResult(row, col.field),
-          });
+          if (col.fields) {
+            rowBlock.content.push({
+              type: 'div',
+              attributes: { class: 'td', field: col.fields[0], style: `min-width:${col.width}px;width:${col.width}px;` },
+              content: '' + getMappedResult(tableRow, col.fields[0]) + '',
+            });
+          }
+          if (col.columns) {
+            // if it has children
+            if (tableRow.children && tableRow.children.length > 0) {
+              const childrenTdDiv = {
+                type: 'div',
+                attributes: { class: 'td' },
+                content: [],
+              };
+              tableRow.children.forEach((childRow) => {
+                const subRowBlock = {
+                  type: 'div',
+                  attributes: { class: 'tr', id: childRow.identity },
+                  content: [],
+                };
+                col.columns.forEach((subCol) => {
+                  subRowBlock.content.push({
+                    type: 'div',
+                    attributes: { class: 'td', field: subCol.fields[0], style: `min-width:${subCol.width}px;width:${subCol.width}px;` },
+                    content: '' + getMappedResult(childRow, subCol.fields[0]) + ' ',
+                  });
+                });
+
+                childrenTdDiv.content.push(subRowBlock)
+              })
+              rowBlock.content.push(childrenTdDiv);
+            } else {
+              // add spacers
+              const subRowArray = [];
+              col.columns.forEach((subCol) => {
+                subRowArray.push({
+                  type: 'div',
+                  attributes: { class: 'td spacer', field: subCol.fields[0], style: `min-width:${subCol.width}px;width:${subCol.width}px;` },
+                  content: ' ',
+                });
+              });
+              rowBlock.content.push({
+                type: 'div',
+                attributes: { class: 'td' },
+                content: [{
+                  type: 'div',
+                  attributes: { class: 'tr' },
+                  content: subRowArray,
+                }],
+              });
+            }
+          }
         });
       }
       tableBlockContent.push(rowBlock);
     });
   }
+  console.log("LOG / file: publisher.js / line 308 / tableRows.forEach / tableBlockContent", JSON.stringify(tableBlockContent));
   return tableBlockContent;
 };
 
@@ -169,14 +290,14 @@ function buildReportTable(templateBlock, dataStore) {
 function buildReportField(templateBlock, dataStore) {
   const fieldContent = [
     {
-      type: 'h5',
+      type: 'h6',
       content: templateBlock.title,
       attributes: { class: ` ` },
     },
     {
-      type: 'h4',
+      type: 'h5',
       content: getMappedResult(dataStore, templateBlock.mapping),
-      attributes: { class: ` ` },
+      attributes: { class: `dataField` },
     },
   ];
   return fieldContent;
@@ -202,7 +323,6 @@ function getMappedResult(dataStore, mapping) {
   if (mappingArray.length === 1) {
     if (Array.isArray(dataStore[mapping]) && dataStore[mapping].length === 1) {
       return dataStore[mapping][0] || null;
-
     } else {
       return dataStore[mapping] || null;
     }
@@ -257,7 +377,7 @@ function buildReportHeader(userName, title = 'Report', subtitle = 'Report Name')
     content: [
       {
         type: 'div',
-        attributes: { class: 'col s2' },
+        attributes: { class: 'col s2 center-align' },
         content: [{
           type: 'img',
           attributes: { class: '', src: 'https://ganister.eu/images/G_50.png' },
@@ -319,13 +439,16 @@ function buildReportBlock(templateBlock, dataStore) {
       htmlBlock.content = templateBlock.items.map((item) => buildReportBlock(item, dataStore))
       break;
     case 'table':
+      const tableTitle = {};
+      tableTitle.type = 'h4';
+      tableTitle.content = templateBlock.title;
       const tableBlock = {};
       tableBlock.type = 'table';
       tableBlock.attributes = { id: templateBlock.id, class: `` };
       tableBlock.content = buildReportTable(templateBlock, dataStore);
       htmlBlock.type = 'div';
-      htmlBlock.attributes = { id: templateBlock.id, class: `` };
-      htmlBlock.content = [tableBlock];
+      htmlBlock.attributes = { id: templateBlock.id, class: `col s${templateBlock.width}` };
+      htmlBlock.content = [tableTitle, tableBlock];
       break;
   }
 

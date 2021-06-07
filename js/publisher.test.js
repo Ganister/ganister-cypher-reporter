@@ -1,53 +1,76 @@
 const publisher = require('./publisher');
 const { dataStore } = require('./published.sampleData');
-
 const template = {
   name: 'test template',
   items: [
     {
       id: 1,
       type: 'field',
-      mapping: 'a',
-      width: '12',
-      title: 'Test A Value'
+      mapping: 'partCount.values.partCount',
+      width: '2',
+      title: '# Parts'
     },
     {
-      id: 2,
-      type: 'container',
+      id: 3,
+      type: 'field',
+      mapping: 'documentCount.values.documentCount',
+      width: '2',
+      title: '# Documents'
+    },
+    {
+      id: 4,
+      type: 'field',
+      mapping: 'userCount.values.userCount',
+      width: '2',
+      title: '# Users'
+    },
+    {
+      id: 5,
+      type: 'table',
+      mapping: 'partBom',
       width: '12',
-      items: [
+      title: 'Part BOM and Documents',
+      inlineRelationships: ['contains'],
+      columns: [
         {
-          id: 3,
-          type: 'field',
-          mapping: 'a',
-          width: '6',
-          title: 'Test C Value'
+          fields: ['_level'],
+          label: 'Level',
+          width: 60,
         },
         {
-          id: 4,
-          type: 'field',
-          mapping: 'a',
-          width: '6',
-          title: 'Test D Value'
+          fields: ['properties._ref'],
+          label: 'Reference',
+          width: 130,
         },
         {
-          id: 5,
-          type: 'table',
-          mapping: 'documents',
-          width: '12',
-          title: 'Test D Value',
+          fields: ['properties.name'],
+          label: 'Name',
+          width: 160,
+        },
+        {
+          fields: ['properties._createdByName'],
+          label: 'Created By',
+          width: 150,
+        },
+        {
+          fields: ['properties._createdOn'],
+          label: 'Created On',
+          width: 160,
+        },
+        {
+          id: 'Docs',
           columns: [
             {
-              field: 'properties._ref',
-              label: 'Reference',
+              nodetype: ['document'],
+              fields: ['node.properties._ref'],
+              label: 'Ref Doc',
+              width: 200,
             },
             {
-              field: 'properties.name',
-              label: 'Name',
-            },
-            {
-              field: 'properties._createdByName',
-              label: 'Created By',
+              nodetype: ['document'],
+              fields: ['node.properties.name'],
+              label: 'Title Doc',
+              width: 200,
             },
           ]
         }
@@ -56,9 +79,7 @@ const template = {
   ]
 };
 
-
-
-test('Recursive Test', async () => {
+test('Recursive Test 1', async () => {
   const dataSet = {
     a: {
       b: 1,
@@ -72,11 +93,11 @@ test('Recursive Test', async () => {
         }
       }
     },
-    i:5,
+    i: 5,
   }
-  expect(publisher.resolveMapping(dataSet, ['a','b','c','d'])).toBe(null);
-  expect(publisher.resolveMapping(dataSet, ['a','c','d'])).toBe(2);
-  expect(publisher.resolveMapping(dataSet, ['a','b'])).toBe(1);
+  expect(publisher.resolveMapping(dataSet, ['a', 'b', 'c', 'd'])).toBe(null);
+  expect(publisher.resolveMapping(dataSet, ['a', 'c', 'd'])).toBe(2);
+  expect(publisher.resolveMapping(dataSet, ['a', 'b'])).toBe(1);
   expect(publisher.resolveMapping(dataSet, ['i'])).toBe(5);
 
 });
@@ -84,7 +105,7 @@ test('Recursive Test', async () => {
 
 
 
-test('Recursive Test', async () => {
+test('Recursive Test 2', async () => {
   const dataSet = {
     a: {
       b: 1,
@@ -98,7 +119,7 @@ test('Recursive Test', async () => {
         }
       }
     },
-    i:5,
+    i: 5,
   }
   expect(publisher.getMappedResult(dataSet, 'a.b.c.d')).toBe(null);
   expect(publisher.getMappedResult(dataSet, 'a.c.d')).toBe(2);
