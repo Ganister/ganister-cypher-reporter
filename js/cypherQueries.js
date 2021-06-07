@@ -44,7 +44,7 @@ async function runQuery(query, cypherDriver) {
   try {
     const result = await session.run(query.query);
     // content.data = parseQueryResult(result);
-    content.data = parseQueryTreeGridResult(result);
+    content.data = parseQueryResult(result);
     await session.close();
     return content;
   } catch (error) {
@@ -54,37 +54,16 @@ async function runQuery(query, cypherDriver) {
 }
 
 
+
 /**
  * 
  * @param {*} result 
  * @returns 
  */
 function parseQueryResult(result) {
-  const data = {};
-  if (result.records.length > 0) {
-    result.records.map((n, index) => {
-      if (n.keys) {
-        n.keys.forEach((key) => {
-          if (!data[index]) data[index] = [];
-          if (!data[index][key]) data[index][key] = [];
-          data[index][key].push(n.get(key));
-        });
-      }
-    });
-  }
-  return data;
-}
-
-
-/**
- * 
- * @param {*} result 
- * @returns 
- */
-function parseQueryTreeGridResult(result) {
   try {
     const nodes = {};
-    const edges = [];
+    let edges = [];
     const values = {};
     if (result.records.length > 0) {
       result.records.map((n, index) => {
@@ -98,48 +77,56 @@ function parseQueryTreeGridResult(result) {
                   obj.segments.forEach((seg) => {
                     if (!nodes[seg.start.identity]) nodes[seg.start.identity] = seg.start;
                     if (!nodes[seg.end.identity]) nodes[seg.end.identity] = seg.end;
-                    if (!edges.some(edge => edge.identity === seg.relationship.identity)) edges.push({
-                      type: 'inPath',
-                      source: seg.start.identity,
-                      target: seg.end.identity,
-                      content: seg.relationship,
-                    });
+                    if (!edges.some(edge => edge.content.identity === seg.relationship.identity)) {
+                      edges.push({
+                        type: 'inPath',
+                        source: seg.start.identity,
+                        label: seg.relationship.type,
+                        target: seg.end.identity,
+                        content: seg.relationship,
+                      })
+                    }
                   });
-
                   if (index > 0) {
                     edges.push({
                       type: 'toPath',
                       source: currentLastRowItem.identity,
+                      label: obj.type,
                       target: obj.start.identity,
                       content: {},
                     });
                   }
                   currentLastRowItem = obj.end;
-
                   break;
                 case 'Relationship':
                   if (index > 0) {
-                    edges.push({
-                      type: 'Relationship',
-                      source: obj.start,
-                      target: obj.end,
-                      content: obj,
-                    });
+                    // prevent duplicates
+                    if (!edges.find(edge => edge.content.identity === obj.identity)) {
+                      edges.push({
+                        type: 'Relationship',
+                        label: obj.type,
+                        source: obj.start,
+                        target: obj.end,
+                        content: obj,
+                      });
+                    }
                   }
                   break;
                 case 'Node':
                   if (!nodes[obj.identity]) nodes[obj.identity] = obj;
-                  console.log("LOG LABELS", obj.labels,currentLastRowItem,index);
-
-                  if (index > 0 && currentLastRowItem) {
-                    // add relationship from currentLastRowItem to actual item
-                    edges.push({
-                      type: 'Node',
-                      source: currentLastRowItem.identity,
-                      target: obj.identity,
-                      content: {},
-                    });
-                  }
+                  // if (index > 0 && currentLastRowItem) {
+                  //   if (!edges.find(edge => edge.content.identity === currentLastRowItem.identity + '-' + obj.identity)) {
+                  //     // add relationship from currentLastRowItem to actual item
+                  //     edges.push({
+                  //       type: 'Node',
+                  //       source: currentLastRowItem.identity,
+                  //       target: obj.identity,
+                  //       content: {
+                  //         identity: currentLastRowItem.identity + '-' + obj.identity
+                  //       },
+                  //     });
+                  //   }
+                  // }
                   currentLastRowItem = obj;
                   break;
                 case 'Number':
@@ -153,6 +140,9 @@ function parseQueryTreeGridResult(result) {
         }
       });
     }
+
+
+
     const data = {
       nodes,
       edges,
@@ -163,31 +153,6 @@ function parseQueryTreeGridResult(result) {
     console.log(error);
   }
 }
-
-
-
-/**
- * 
- * @param {*} query 
- * @param {*} cypherDriver 
- */
-async function runRecursiveQuery(query, cypherDriver) {
-
-  // prepare dataSet
-  let data = {};
-
-  // run query
-  const session = cypherDriver.session();
-  try {
-    await session.run(query);
-    await session.close();
-    return data;
-  } catch (error) {
-    await session.close();
-    return data;
-  }
-}
-
 
 
 
