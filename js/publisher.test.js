@@ -103,7 +103,7 @@ const template = {
                 },
                 {
                   graphType: 'node',
-                  fields: { file: { map: 'node.properties.name', datatype: 'filesize' } },
+                  fields: { file: { map: 'node.properties.name', datatype: 'string' } },
                   label: 'Name',
                   width: 300,
                 },
