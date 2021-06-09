@@ -254,7 +254,7 @@ function buildReportTable(templateBlock, dataStore) {
               }
               subcols.forEach((subCol) => {
                 if (subCol.columns) {
-                  handleSubColumns(subCol.columns, {},subRowBlockSpacer);
+                  handleSubColumns(subCol.columns, {}, subRowBlockSpacer);
                 } else {
                   subRowArray.push({
                     type: 'div',
@@ -413,6 +413,28 @@ function resolveMapping(dataStore, mapping) {
 }
 
 
+/**
+ * humanFileSize
+ * transforms a byte size of file into human readable format
+ * @param {*} bytes 
+ * @param {*} si 
+ */
+ function humanFileSize(bytes, si) {
+  const thresh = si ? 1000 : 1024;
+  if (Math.abs(bytes) < thresh) {
+    return `${bytes} B`;
+  }
+  const units = si
+    ? ['kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+    : ['KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'];
+  let u = -1;
+  do {
+    bytes /= thresh;
+    ++u;
+  } while (Math.abs(bytes) >= thresh && u < units.length - 1);
+  return `${bytes.toFixed(1)} ${units[u]}`;
+}
+
 
 /**
  * 
@@ -425,6 +447,9 @@ function formatValue(value, type) {
     case 'string':
       formattedValue = value;
       break;
+      case 'filesize':
+        formattedValue= humanFileSize(value,true);
+        break;
     case 'date':
       formattedValue = new Date(value).toLocaleDateString(locale);
       break;
@@ -441,6 +466,7 @@ function formatValue(value, type) {
   }
   return formattedValue;
 }
+
 
 
 /**
