@@ -16,6 +16,8 @@ module.exports.htmlStyle = `
   flex-wrap: nowrap;
   align-items: stretch; 
   min-height: 23px;
+}
+.tr > .td,.tr > .th  {
   border-bottom: solid 1px #DDD;
 }
 
@@ -67,4 +69,6 @@ td,th{
 h2{
   margin:0rem 0 1.424rem 0 !important;
 }
+
+
 `

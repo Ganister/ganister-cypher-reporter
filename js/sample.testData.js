@@ -25,7 +25,8 @@ const queries = [
     id: 'partBom',
     query: `MATCH p=(a:part{_id:'8d835650-7b35-11eb-9cb7-e11518db4323'})-[:consumes*]->(items:part) 
             OPTIONAL MATCH (items)-[rel]->(docs:document)
-            RETURN p,rel,docs`,
+            OPTIONAL MATCH (docs)-[rel2]->(f:file)
+            RETURN p,rel,docs,rel2,f`,
   }
 ];
 
@@ -73,15 +74,21 @@ const template = {
       title: 'Document Listing',
       columns: [
         {
-          field: 'properties._ref',
+          field: {
+            'part': 'properties._ref'
+          },
           label: 'Reference',
         },
         {
-          field: 'properties.name',
+          field: {
+            'part': 'properties.name'
+          },
           label: 'Name',
         },
         {
-          field: 'properties._createdByName',
+          field: {
+            'part': 'properties._createdByName'
+          },
           label: 'Created By',
         },
         {

@@ -2,11 +2,14 @@ const publisher = require('./publisher');
 const { dataStore } = require('./published.sampleData');
 const template = {
   name: 'test template',
+  locale : "fr-FR",
+  author: 'Yoann Maingon',
   items: [
     {
       id: 1,
       type: 'field',
       mapping: 'partCount.values.partCount',
+      datatype: 'integer',
       width: '2',
       title: '# Parts'
     },
@@ -14,6 +17,7 @@ const template = {
       id: 3,
       type: 'field',
       mapping: 'documentCount.values.documentCount',
+      datatype: 'integer',
       width: '2',
       title: '# Documents'
     },
@@ -21,6 +25,7 @@ const template = {
       id: 4,
       type: 'field',
       mapping: 'userCount.values.userCount',
+      datatype: 'integer',
       width: '2',
       title: '# Users'
     },
@@ -35,31 +40,34 @@ const template = {
         {
           graphType: 'node',
           indentation: true,
-          fields: { part: '_level', user: '_level' },
+          fields: { part: { map: '_level', datatype: 'level' }, user: { map: '_level', datatype: 'level' } },
           label: 'Level',
           width: 120,
         },
         {
           graphType: 'node',
-          fields: { part: 'properties._ref', user: 'properties.lastName' },
+          fields: {
+            part: { map: 'properties._ref', datatype: 'string' },
+            user: { map: 'properties.lastName', datatype: 'string' }
+          },
           label: 'Ref',
           width: 130,
         },
         {
           graphType: 'node',
-          fields: { part: 'properties.name' },
+          fields: { part: { map: 'properties.name', datatype: 'string' } },
           label: 'Name',
           width: 160,
         },
         {
           graphType: 'node',
-          fields: { part: 'properties._createdByName' },
+          fields: { part: { map: 'properties._createdByName', datatype: 'string' } },
           label: 'Created By',
           width: 150,
         },
         {
           graphType: 'node',
-          fields: { part: 'properties._createdOn' },
+          fields: { part: { map: 'properties._createdOn', datatype: 'date' } },
           label: 'Created On',
           width: 160,
         },
@@ -68,24 +76,47 @@ const template = {
           columns: [
             {
               graphType: 'node',
-              fields: { document: 'node.properties._ref' },
+              fields: { document: { map: 'node.properties._ref', datatype: 'string' } },
               label: 'Ref Doc',
               width: 200,
             },
             {
               graphType: 'node',
-              fields: { document: 'node.properties.name' },
+              fields: { document: { map: 'node.properties.name', datatype: 'string' } },
               label: 'Title Doc',
               width: 200,
             },
+            {
+              id: 'Files',
+              columns: [
+                {
+                  graphType: 'node',
+                  fields: { file: { map: 'node.properties.filename', datatype: 'string' } },
+                  label: 'File Ref',
+                  width: 200,
+                },
+                {
+                  graphType: 'node',
+                  fields: { file: { map: 'node.properties.filesize', datatype: 'filesize' } },
+                  label: 'FileSize',
+                  width: 200,
+                },
+                {
+                  graphType: 'node',
+                  fields: { file: { map: 'node.properties.name', datatype: 'filesize' } },
+                  label: 'Name',
+                  width: 300,
+                },
+              ]
+            },
           ]
         },
-        {
-          graphType: 'node',
-          fields: { user: 'properties.email' },
-          label: 'email',
-          width: 200,
-        },
+        // {
+        //   graphType: 'node',
+        //   fields: { user: { map: 'properties.email', datatype: 'email' } },
+        //   label: 'email',
+        //   width: 200,
+        // },
       ]
     }
   ]

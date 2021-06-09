@@ -1,9 +1,7 @@
 const htmlCreator = require('html-creator');
 const path = require('path');
-const { htmlStyle } = require('./publisherStyles')
-
-
-
+const { htmlStyle } = require('./publisher.styles')
+let locale = "fr-FR";
 
 /**
  * 
@@ -15,35 +13,36 @@ async function produce(dataStore, template) {
 
   // init
   const htmlCreatorContent = [];
+  locale = template.locale;
 
   // build header
-  htmlCreatorContent.push(
-    {
-      type: 'head',
-      content: [
-        { type: 'title', content: `Ganister Report : ${template.name}` },
-        { type: 'link', attributes: { href: 'https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css', rel: 'stylesheet' } },
-        {
-          type: 'style', content: htmlStyle
-        }
-      ]
-    }
-  );
+  const head = {
+    type: 'head',
+    content: [
+      { type: 'title', content: `Ganister Report : ${template.name}` },
+      { type: 'link', attributes: { href: 'https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css', rel: 'stylesheet' } },
+      {
+        type: 'style', content: htmlStyle
+      }
+    ]
+  };
+
+
+  // initialize body
   const body = {
     type: 'body',
     attributes: {
       id: 'reportPage',
       class: 'reportPage',
     },
-    content: [],
+    content: [
+      // add report header
+      buildReportHeader(template.author),
+      // add hr separation
+      { type: 'hr' },
+    ],
   };
 
-  // add header
-  body.content.push(buildReportHeader('Yoann Maingon'));
-  // add hr separation
-  body.content.push({
-    type: 'hr',
-  });
 
   // generate content
   if (template.items) {
@@ -56,10 +55,14 @@ async function produce(dataStore, template) {
     attributes: {
       class: 'row',
     },
-    content: [],
+    content: [body],
   };
-  mainDataContent.content.push(body);
+
+
+  // Assemble the main document
+  htmlCreatorContent.push(head);
   htmlCreatorContent.push(mainDataContent);
+
   // load htmlCreator content
   const html = new htmlCreator(htmlCreatorContent);
 
@@ -84,47 +87,49 @@ function convertStoreToTableRows(dataStoreElement, templateBlock) {
   });
 
 
-  const rowRecursiveHandler = (rootElement, nodes, edges, level = 0, templateBlock) => {
-
-    level++;
-    rootElement.children = [];
-    rootElement._level = level;
-    delete rootElement.properties._promotions;
-    delete rootElement.properties._history;
-    tableRows.push(rootElement);
-    // handle inline relationships
-    edges
-      .filter((edge) => edge.source === rootElement.identity)
-      .filter((edge) => templateBlock.inlineRelationships.indexOf(edge.label) > -1)
-      .forEach((edge) => {
-        // console.log("LOG / file: publisher.js / line 120 / .forEach / edge", edge);
-        rootElement.children.push({
-          edge,
-          node: nodes[edge.target]
-        });
-      });
-
-    // handle subline relationships
-    edges
-      .filter((edge) => edge.source === rootElement.identity)
-      .filter((edge) => templateBlock.inlineRelationships.indexOf(edge.label) < 0)
-      .forEach((edge) => {
-        // console.log("LOG / file: publisher.js / line 132 / .forEach / edge", edge);
-        const subElement = nodes[edge.target];
-        rowRecursiveHandler(subElement, nodes, edges, level, templateBlock);
-      });
-  }
-
   for (const [key, value] of Object.entries(rootElements)) {
-    rowRecursiveHandler(value, nodes, edges, 0, templateBlock);
+    tableRows.push(value);
+    rowRecursiveHandler(value, nodes, edges, 0, templateBlock, tableRows);
   }
 
-  // console.log("LOG / file: publisher.js / line 114 / rowRecursiveHandler / tableRows", JSON.stringify(tableRows));
 
   return tableRows;
 }
 
 
+function rowRecursiveHandler(rootElement, nodes, edges, level, templateBlock, tableRows) {
+
+  level++;
+  rootElement.children = [];
+  rootElement._level = level;
+  delete rootElement.properties._promotions;
+  delete rootElement.properties._history;
+
+
+  // handle inline relationships
+  edges
+    .filter((edge) => edge.source === rootElement.identity)
+    .filter((edge) => templateBlock.inlineRelationships.indexOf(edge.label) > -1)
+    .forEach((edge) => {
+      const subElement = nodes[edge.target];
+      rowRecursiveHandler(subElement, nodes, edges, level, templateBlock, tableRows);
+      rootElement.children.push({
+        edge,
+        node: subElement
+      });
+
+    });
+
+  // handle subline relationships
+  edges
+    .filter((edge) => edge.source === rootElement.identity)
+    .filter((edge) => templateBlock.inlineRelationships.indexOf(edge.label) < 0)
+    .forEach((edge) => {
+      const subElement = nodes[edge.target];
+      tableRows.push(subElement);
+      rowRecursiveHandler(subElement, nodes, edges, level, templateBlock, tableRows);
+    });
+}
 
 /**
  * 
@@ -141,28 +146,26 @@ function buildReportTable(templateBlock, dataStore) {
     content: [],
   };
   if (templateBlock.columns) {
-    templateBlock.columns.forEach((col) => {
-      if (col.fields) {
-        headerBlock.content.push({
-          type: 'div',
-          attributes: { class: 'th', style: `width:${col.width}px;min-width:${col.width}px;` },
-          content: col.label,
-        });
-      }
-      if (col.columns) {
-        col.columns.forEach((subCol) => {
+    const buildColumns = (columns) => {
+      columns.forEach((col) => {
+        if (col.fields) {
           headerBlock.content.push({
             type: 'div',
-            attributes: { class: 'th', style: `width:${subCol.width}px;min-width:${subCol.width}px;` },
-            content: subCol.label,
+            attributes: { class: 'th', style: `width:${col.width}px;min-width:${col.width}px;` },
+            content: col.label,
           });
-        })
-      }
-    });
+        }
+        if (col.columns) {
+          buildColumns(col.columns)
+        }
+      });
+    }
+    buildColumns(templateBlock.columns);
+
   }
   tableBlockContent.push(headerBlock);
 
-  const indentationColumns = 10;
+  const indentationColumns = 5;
 
   // Add Data
   const tableRows = convertStoreToTableRows(dataStore[templateBlock.mapping], templateBlock);
@@ -176,7 +179,10 @@ function buildReportTable(templateBlock, dataStore) {
       if (templateBlock.columns) {
         templateBlock.columns.forEach((col) => {
           if (col.fields) {
+
             if (col.indentation) {
+
+              // Handle indentation column
               const indentCases = [];
               for (let i = 1; i < indentationColumns + 1; i++) {
                 let cross = ' ';
@@ -185,7 +191,7 @@ function buildReportTable(templateBlock, dataStore) {
                 }
                 indentCases.push({
                   type: 'div',
-                  attributes: { class: 'td level', field: col.label, style: `text-align: center;min-width:${(col.width / indentationColumns)-2}px;width:${(col.width / indentationColumns)-2}px;` },
+                  attributes: { class: 'td level', field: col.label, style: `text-align: center;min-width:${(col.width / indentationColumns) - 2}px;width:${(col.width / indentationColumns) - 2}px;` },
                   content: cross,
                 });
               }
@@ -195,6 +201,8 @@ function buildReportTable(templateBlock, dataStore) {
                 content: indentCases,
               });
             } else {
+
+              // Handle normal column
               rowBlock.content.push({
                 type: 'div',
                 attributes: { class: 'td', field: col.label, style: `min-width:${col.width}px;width:${col.width}px;` },
@@ -202,51 +210,70 @@ function buildReportTable(templateBlock, dataStore) {
               });
             }
           }
-          if (col.columns) {
+
+          const handleSubColumns = (subcols, row, block) => {
             // if it has children
-            if (tableRow.children && tableRow.children.length > 0) {
+            if (row.node && row.node.children && row.node.children.length > 0) {
+              row.children = row.node.children;
+            }
+            if (row.children && row.children.length > 0) {
               const childrenTdDiv = {
                 type: 'div',
                 attributes: { class: 'tdr' },
                 content: [],
               };
-              tableRow.children.forEach((childRow) => {
+              row.children.forEach((childRow) => {
                 const subRowBlock = {
                   type: 'div',
-                  attributes: { class: 'tr', id: childRow.identity },
+                  attributes: { class: 'tr', id: childRow.node.identity },
                   content: [],
                 };
-                col.columns.forEach((subCol) => {
-                  subRowBlock.content.push({
-                    type: 'div',
-                    attributes: { class: 'td', field: subCol.label, style: `min-width:${subCol.width}px;width:${subCol.width}px;` },
-                    content: '' + getTableMappedResult(childRow, subCol.graphType, subCol.fields, true) + ' ',
-                  });
+                subcols.forEach((subCol) => {
+                  if (subCol.columns) {
+                    handleSubColumns(subCol.columns, childRow, subRowBlock);
+                  } else {
+                    subRowBlock.content.push({
+                      type: 'div',
+                      attributes: { class: 'td', field: subCol.label, style: `min-width:${subCol.width}px;width:${subCol.width}px;` },
+                      content: '' + getTableMappedResult(childRow, subCol.graphType, subCol.fields, true) + ' ',
+                    });
+                  }
                 });
 
                 childrenTdDiv.content.push(subRowBlock)
               })
-              rowBlock.content.push(childrenTdDiv);
+              block.content.push(childrenTdDiv);
             } else {
-              // add spacers
+
+              // add spacers when no data is available
               const subRowArray = [];
-              col.columns.forEach((subCol) => {
-                subRowArray.push({
-                  type: 'div',
-                  attributes: { class: 'td spacer', field: subCol.fields[0], style: `min-width:${subCol.width}px;width:${subCol.width}px;` },
-                  content: ' ',
-                });
-              });
-              rowBlock.content.push({
+              const subRowBlockSpacer = {
                 type: 'div',
-                attributes: { class: 'tdr' },
-                content: [{
-                  type: 'div',
-                  attributes: { class: 'tr' },
-                  content: subRowArray,
-                }],
+                attributes: { class: 'tr' },
+                content: subRowArray,
+              }
+              subcols.forEach((subCol) => {
+                if (subCol.columns) {
+                  handleSubColumns(subCol.columns, {},subRowBlockSpacer);
+                } else {
+                  subRowArray.push({
+                    type: 'div',
+                    attributes: { class: 'td spacer', field: subCol.label, style: `min-width:${subCol.width}px;width:${subCol.width}px;` },
+                    content: ' ',
+                  });
+                }
               });
+              block.content.push({
+                type: 'div',
+                attributes: { class: 'tdr', style: 'display: flex;' },
+                content: [subRowBlockSpacer],
+              });
+
             }
+          }
+
+          if (col.columns) {
+            handleSubColumns(col.columns, tableRow, rowBlock);
           }
         });
       }
@@ -289,17 +316,15 @@ function buildReportField(templateBlock, dataStore) {
 
 
 
-
-
-
-
 /**
  * 
  * @param {*} dataStore 
  * @param {*} mapping 
  * @returns 
  */
-function getMappedResult(dataStore, mapping) {
+function getMappedResult(dataStore, mapping, datatype) {
+
+  // convert mapping into array
   const mappingArray = mapping.split('.');
   if (mappingArray.length === 1) {
     if (Array.isArray(dataStore[mapping]) && dataStore[mapping].length === 1) {
@@ -308,7 +333,11 @@ function getMappedResult(dataStore, mapping) {
       return dataStore[mapping] || null;
     }
   } else if (mappingArray.length > 1) {
-    return resolveMapping(dataStore, mappingArray);
+    // retrieve object value
+    const value = resolveMapping(dataStore, mappingArray);
+
+    // return the formatted result
+    return formatValue(value, datatype);
   }
   return null;
 }
@@ -338,16 +367,18 @@ function getTableMappedResult(dataStore, graphType, mapping, children = false) {
     }
   }
 
-  if (label in mapping) {
-    const mappingArray = mapping[label].split('.');
+  if (mapping && (label in mapping)) {
+    const mappingArray = mapping[label].map.split('.');
+    const datatype = mapping[label].datatype;
     if (mappingArray.length === 1) {
-      if (Array.isArray(dataStore[mapping[label]]) && dataStore[mapping[label]].length === 1) {
-        return dataStore[mapping[label]][0] || null;
+      if (Array.isArray(dataStore[mapping[label]]) && dataStore[mapping[label].map].length === 1) {
+        return dataStore[mapping[label].map][0] || null;
       } else {
-        return dataStore[mapping[label]] || null;
+        return dataStore[mapping[label].map] || null;
       }
     } else if (mappingArray.length > 1) {
-      return resolveMapping(dataStore, mappingArray);
+      const value = resolveMapping(dataStore, mappingArray);
+      return formatValue(value, datatype);
     }
   }
   return ' ';
@@ -359,23 +390,57 @@ function getTableMappedResult(dataStore, graphType, mapping, children = false) {
  * 
  * @param {*} dataStore 
  * @param {*} mapping 
+ * @param {*} datatype
  * @returns 
  */
 function resolveMapping(dataStore, mapping) {
+
+  // check if data exists and if mapping exists
   if (!dataStore || mapping.length < 1) return null;
+
   if (mapping.length > 1) {
+
+    // if object mapping go on object deeper and restart this method recursively
     const firstElt = mapping.shift();
     return resolveMapping(dataStore[firstElt], mapping);
+
   } else {
+
+    // if value mapping return data
     const firstElt = mapping.shift();
-    return dataStore[firstElt]
+    return dataStore[firstElt];
   }
 }
 
 
 
-
-
+/**
+ * 
+ * @param {*} value 
+ * @param {*} type 
+ */
+function formatValue(value, type) {
+  let formattedValue = value;
+  switch (type) {
+    case 'string':
+      formattedValue = value;
+      break;
+    case 'date':
+      formattedValue = new Date(value).toLocaleDateString(locale);
+      break;
+    case 'boolean':
+      if (!!JSON.parse(value)) {
+        formattedValue = "✔️";
+      } else {
+        formattedValue = "❌";
+      }
+      break;
+    default:
+      formattedValue = value;
+      break;
+  }
+  return formattedValue;
+}
 
 
 /**
