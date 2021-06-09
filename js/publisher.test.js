@@ -33,27 +33,33 @@ const template = {
       inlineRelationships: ['contains'],
       columns: [
         {
-          fields: ['_level'],
+          graphType: 'node',
+          indentation: true,
+          fields: { part: '_level', user: '_level' },
           label: 'Level',
-          width: 60,
+          width: 120,
         },
         {
-          fields: ['properties._ref'],
-          label: 'Reference',
+          graphType: 'node',
+          fields: { part: 'properties._ref', user: 'properties.lastName' },
+          label: 'Ref',
           width: 130,
         },
         {
-          fields: ['properties.name'],
+          graphType: 'node',
+          fields: { part: 'properties.name' },
           label: 'Name',
           width: 160,
         },
         {
-          fields: ['properties._createdByName'],
+          graphType: 'node',
+          fields: { part: 'properties._createdByName' },
           label: 'Created By',
           width: 150,
         },
         {
-          fields: ['properties._createdOn'],
+          graphType: 'node',
+          fields: { part: 'properties._createdOn' },
           label: 'Created On',
           width: 160,
         },
@@ -61,19 +67,25 @@ const template = {
           id: 'Docs',
           columns: [
             {
-              nodetype: ['document'],
-              fields: ['node.properties._ref'],
+              graphType: 'node',
+              fields: { document: 'node.properties._ref' },
               label: 'Ref Doc',
               width: 200,
             },
             {
-              nodetype: ['document'],
-              fields: ['node.properties.name'],
+              graphType: 'node',
+              fields: { document: 'node.properties.name' },
               label: 'Title Doc',
               width: 200,
             },
           ]
-        }
+        },
+        {
+          graphType: 'node',
+          fields: { user: 'properties.email' },
+          label: 'email',
+          width: 200,
+        },
       ]
     }
   ]

@@ -1,6 +1,10 @@
 module.exports.htmlStyle = `  
 .td {
-  padding: 4px 2px;
+  padding: 2px 6px;
+}
+
+.td.level{
+  padding: 0 0;
 }
 
 .td > .tr:last-child {
@@ -10,19 +14,40 @@ module.exports.htmlStyle = `
   display: flex; 
   flex-direction: row;
   flex-wrap: nowrap;
-  align-items: center; 
+  align-items: stretch; 
   min-height: 23px;
-  border-bottom: solid 1px #EEE;
+  border-bottom: solid 1px #DDD;
 }
 
-.tr:nth-child(odd) {
-  background-color:#f6f6f6;
-}
 .th {
   font-weight: bold;
   padding: 8px 4px;
 }
 
+.indentation {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
+
+.indentation > div.td {
+  border-right: solid 1px #EEE;
+}
+
+.indentation > div.td:last-child {
+  border-right: none;
+}
+
+.tr > div {
+  border-right: solid 1px #EEE;
+}
+.tr > div.td:last-child {
+  border-right: none;
+}
+
+.tdr > .tr:last-child {
+  border-bottom:none;
+}
 .reportPage {
   padding: 10px 50px;
 }
@@ -30,13 +55,13 @@ module.exports.htmlStyle = `
   padding-bottom: 20px;
 }
 td,th{
-  padding: 7px 5px;
+  padding: 5px 6px;
 }
 
 .dataField {
   background-color: #e6f4ff;
   padding: 10px;
-  border-radius: 10px;
+  border-radius: 6px;
   border: solid 1px #BBB;
 }
 h2{

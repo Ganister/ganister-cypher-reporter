@@ -162,6 +162,8 @@ function buildReportTable(templateBlock, dataStore) {
   }
   tableBlockContent.push(headerBlock);
 
+  const indentationColumns = 10;
+
   // Add Data
   const tableRows = convertStoreToTableRows(dataStore[templateBlock.mapping], templateBlock);
   if (tableRows) {
@@ -174,18 +176,38 @@ function buildReportTable(templateBlock, dataStore) {
       if (templateBlock.columns) {
         templateBlock.columns.forEach((col) => {
           if (col.fields) {
-            rowBlock.content.push({
-              type: 'div',
-              attributes: { class: 'td', field: col.fields[0], style: `min-width:${col.width}px;width:${col.width}px;` },
-              content: '' + getMappedResult(tableRow, col.fields[0]) + '',
-            });
+            if (col.indentation) {
+              const indentCases = [];
+              for (let i = 1; i < indentationColumns + 1; i++) {
+                let cross = ' ';
+                if (i == getTableMappedResult(tableRow, col.graphType, col.fields)) {
+                  cross = '' + getTableMappedResult(tableRow, col.graphType, col.fields) + '';
+                }
+                indentCases.push({
+                  type: 'div',
+                  attributes: { class: 'td level', field: col.label, style: `text-align: center;min-width:${(col.width / indentationColumns)-2}px;width:${(col.width / indentationColumns)-2}px;` },
+                  content: cross,
+                });
+              }
+              rowBlock.content.push({
+                type: 'div',
+                attributes: { class: 'td indentation', field: col.label, style: `min-width:${col.width}px;width:${col.width}px;` },
+                content: indentCases,
+              });
+            } else {
+              rowBlock.content.push({
+                type: 'div',
+                attributes: { class: 'td', field: col.label, style: `min-width:${col.width}px;width:${col.width}px;` },
+                content: '' + getTableMappedResult(tableRow, col.graphType, col.fields) + '',
+              });
+            }
           }
           if (col.columns) {
             // if it has children
             if (tableRow.children && tableRow.children.length > 0) {
               const childrenTdDiv = {
                 type: 'div',
-                attributes: { class: 'td' },
+                attributes: { class: 'tdr' },
                 content: [],
               };
               tableRow.children.forEach((childRow) => {
@@ -197,8 +219,8 @@ function buildReportTable(templateBlock, dataStore) {
                 col.columns.forEach((subCol) => {
                   subRowBlock.content.push({
                     type: 'div',
-                    attributes: { class: 'td', field: subCol.fields[0], style: `min-width:${subCol.width}px;width:${subCol.width}px;` },
-                    content: '' + getMappedResult(childRow, subCol.fields[0]) + ' ',
+                    attributes: { class: 'td', field: subCol.label, style: `min-width:${subCol.width}px;width:${subCol.width}px;` },
+                    content: '' + getTableMappedResult(childRow, subCol.graphType, subCol.fields, true) + ' ',
                   });
                 });
 
@@ -217,7 +239,7 @@ function buildReportTable(templateBlock, dataStore) {
               });
               rowBlock.content.push({
                 type: 'div',
-                attributes: { class: 'td' },
+                attributes: { class: 'tdr' },
                 content: [{
                   type: 'div',
                   attributes: { class: 'tr' },
@@ -231,7 +253,6 @@ function buildReportTable(templateBlock, dataStore) {
       tableBlockContent.push(rowBlock);
     });
   }
-  console.log("LOG / file: publisher.js / line 308 / tableRows.forEach / tableBlockContent", JSON.stringify(tableBlockContent));
   return tableBlockContent;
 };
 
@@ -295,6 +316,42 @@ function getMappedResult(dataStore, mapping) {
 
 
 
+/**
+ * 
+ * @param {*} dataStore 
+ * @param {*} mapping 
+ * @returns 
+ */
+function getTableMappedResult(dataStore, graphType, mapping, children = false) {
+  let label;
+  if (graphType === 'node') {
+    if (children) {
+      label = dataStore.node.labels[0];
+    } else {
+      label = dataStore.labels[0];
+    }
+  } else {
+    if (children) {
+      label = dataStore.edge.label;
+    } else {
+      label = dataStore.label;
+    }
+  }
+
+  if (label in mapping) {
+    const mappingArray = mapping[label].split('.');
+    if (mappingArray.length === 1) {
+      if (Array.isArray(dataStore[mapping[label]]) && dataStore[mapping[label]].length === 1) {
+        return dataStore[mapping[label]][0] || null;
+      } else {
+        return dataStore[mapping[label]] || null;
+      }
+    } else if (mappingArray.length > 1) {
+      return resolveMapping(dataStore, mappingArray);
+    }
+  }
+  return ' ';
+}
 
 
 
