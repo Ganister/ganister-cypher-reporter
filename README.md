@@ -114,5 +114,8 @@ const cypherDriver = neo4j.driver('bolt://<neo4jBoltAddress>', neo4j.auth.basic(
 
 ## License
 
+## Roadmap
+Evolution of features are listed on the [project kanban board](https://github.com/Ganister/ganister-cypher-reporter/projects/1)
+
 ## Semver
 Until ganister-cypher-reporter reaches a 1.0.0 release, breaking changes will be released with a new minor version.
