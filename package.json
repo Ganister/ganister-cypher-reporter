@@ -11,7 +11,6 @@
   "dependencies": {
     "html-creator": "^0.4.4",
     "joi": "^17.4.0",
-    "tailwindcss": "^2.1.2"
   },
   "devDependencies": {
     "dotenv": "^9.0.2",
