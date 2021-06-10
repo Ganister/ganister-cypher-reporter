@@ -9,6 +9,8 @@ const optionsSchema = Joi.object({
   queries: Joi.array().required(),
   template: Joi.object({
     name: Joi.string().required(),
+    locale: Joi.string().required(),
+    author: Joi.string().required(),
     items: Joi.array().items(Joi.object({
       id: Joi.number().required(),
       type: Joi.string().allow('field', 'table', 'graph').required(),
