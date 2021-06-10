@@ -20,7 +20,7 @@ To produce a report you need the following elements :
 - an output option (html/pdf)
 - a neo4j driver authentified instance
 
-```
+```javascript
 const reporter = require('ganister-cypher-reporter');
 await reporter.buildReport({
    queries, 
@@ -36,7 +36,7 @@ Cypher queries have to be identified with a unique id.
 Cypher queries can return paths, nodes, relationships or just values
 
 Sample : 
-```
+```javascript
 const queries = [
   {
     id: 'docs',
@@ -66,7 +66,7 @@ const queries = [
 ### Report Template
 
 Report Template Schema : 
-```
+```javascript
 const optionsSchema = Joi.object({
   queries: Joi.array().required(),
   template: Joi.object({
@@ -102,7 +102,7 @@ For now we only support 'html' as an output.
 
 ### Driver
 
-```
+```javascript
 const neo4j = require('neo4j-driver');
 const cypherDriver = neo4j.driver('bolt://<neo4jBoltAddress>', neo4j.auth.basic(
   '<username>',
