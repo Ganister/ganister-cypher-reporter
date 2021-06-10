@@ -419,7 +419,7 @@ function resolveMapping(dataStore, mapping) {
  * @param {*} bytes 
  * @param {*} si 
  */
- function humanFileSize(bytes, si) {
+function humanFileSize(bytes, si) {
   const thresh = si ? 1000 : 1024;
   if (Math.abs(bytes) < thresh) {
     return `${bytes} B`;
@@ -447,9 +447,9 @@ function formatValue(value, type) {
     case 'string':
       formattedValue = value;
       break;
-      case 'filesize':
-        formattedValue= humanFileSize(value,true);
-        break;
+    case 'filesize':
+      formattedValue = humanFileSize(value, true);
+      break;
     case 'date':
       formattedValue = new Date(value).toLocaleDateString(locale);
       break;
