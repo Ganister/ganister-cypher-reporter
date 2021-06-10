@@ -1442,6 +1442,7 @@ module.exports.dataStore = {
 					"_createdBy": "5c1e6650-654f-11eb-a2e5-fd01fad4824a",
 					"type": "Part",
 					"_lockState": true,
+					"_promotions": "[{\"fromState\":\"Draft\",\"toState\":\"In Review\",\"user\":{\"name\":\"Claire Stajol\",\"_id\":\"5c1e6650-654f-11eb-a2e5-fd01fad4824a\"},\"comment\":\"ok\",\"time\":1612368329962,\"_version\":\"3.1.0\"},{\"fromState\":\"Draft\",\"toState\":\"In Review\",\"user\":{\"name\":\"Claire Stajol\",\"_id\":\"5c1e6650-654f-11eb-a2e5-fd01fad4824a\"},\"comment\":\"ok\",\"time\":1612368392460,\"_version\":\"3.1.0\"},{\"fromState\":\"In Review\",\"toState\":\"Draft\",\"user\":{\"name\":\"Claire Stajol\",\"_id\":\"5c1e6650-654f-11eb-a2e5-fd01fad4824a\"},\"comment\":\"ok\",\"time\":1612368418488,\"_version\":\"3.1.0\"},{\"fromState\":\"Draft\",\"toState\":\"In Review\",\"user\":{\"name\":\"Claire Stajol\",\"_id\":\"5c1e6650-654f-11eb-a2e5-fd01fad4824a\"},\"comment\":\"ok\",\"time\":1612368666749,\"_version\":\"3.1.0\"},{\"fromState\":\"In Review\",\"toState\":\"Draft\",\"user\":{\"name\":\"Claire Stajol\",\"_id\":\"5c1e6650-654f-11eb-a2e5-fd01fad4824a\"},\"comment\":\"ok\",\"time\":1612369540969,\"_version\":\"3.1.0\"},{\"fromState\":\"Draft\",\"toState\":\"In Review\",\"user\":{\"name\":\"Claire Stajol\",\"_id\":\"5c1e6650-654f-11eb-a2e5-fd01fad4824a\"},\"comment\":\"ok\",\"time\":1612369567069,\"_version\":\"3.1.0\"},{\"fromState\":\"In Review\",\"toState\":\"Draft\",\"user\":{\"name\":\"Claire Stajol\",\"_id\":\"5c1e6650-654f-11eb-a2e5-fd01fad4824a\"},\"comment\":\"ok\",\"time\":1612369695219,\"_version\":\"3.1.0\"},{\"fromState\":\"Draft\",\"toState\":\"In Review\",\"user\":{\"name\":\"Claire Stajol\",\"_id\":\"5c1e6650-654f-11eb-a2e5-fd01fad4824a\"},\"comment\":\"ok\",\"time\":1612369740047,\"_version\":\"3.1.0\"},{\"fromState\":\"In Review\",\"toState\":\"Draft\",\"user\":{\"name\":\"Claire Stajol\",\"_id\":\"5c1e6650-654f-11eb-a2e5-fd01fad4824a\"},\"comment\":\"ok\",\"time\":1612369816469,\"_version\":\"3.1.0\"},{\"fromState\":\"Draft\",\"toState\":\"In Review\",\"user\":{\"name\":\"Claire Stajol\",\"_id\":\"5c1e6650-654f-11eb-a2e5-fd01fad4824a\"},\"comment\":\"ok\",\"time\":1612370152265,\"_version\":\"3.1.0\"},{\"fromState\":\"In Review\",\"toState\":\"Draft\",\"user\":{\"name\":\"Claire Stajol\",\"_id\":\"5c1e6650-654f-11eb-a2e5-fd01fad4824a\"},\"comment\":\"ok\",\"time\":1612370259813,\"_version\":\"3.1.0\"},{\"fromState\":\"Draft\",\"toState\":\"In Review\",\"user\":{\"name\":\"Claire Stajol\",\"_id\":\"5c1e6650-654f-11eb-a2e5-fd01fad4824a\"},\"comment\":\"ok\",\"time\":1612370473475,\"_version\":\"3.1.0\"},{\"fromState\":\"In Review\",\"toState\":\"Draft\",\"user\":{\"name\":\"Claire Stajol\",\"_id\":\"5c1e6650-654f-11eb-a2e5-fd01fad4824a\"},\"comment\":\"ok\",\"time\":1612370532047,\"_version\":\"3.1.0\"},{\"fromState\":\"Draft\",\"toState\":\"In Review\",\"user\":{\"name\":\"Claire Stajol\",\"_id\":\"5c1e6650-654f-11eb-a2e5-fd01fad4824a\"},\"comment\":\"ok\",\"time\":1612370785634,\"_version\":\"3.1.0\"},{\"fromState\":\"In Review\",\"toState\":\"Draft\",\"user\":{\"name\":\"Claire Stajol\",\"_id\":\"5c1e6650-654f-11eb-a2e5-fd01fad4824a\"},\"comment\":\"ok\",\"time\":1612370817848,\"_version\":\"3.1.0\"},{\"fromState\":\"Draft\",\"toState\":\"In Review\",\"user\":{\"name\":\"Claire Stajol\",\"_id\":\"5c1e6650-654f-11eb-a2e5-fd01fad4824a\"},\"comment\":\"ok\",\"time\":1612370884749,\"_version\":\"3.1.0\"},{\"fromState\":\"In Review\",\"toState\":\"Draft\",\"user\":{\"name\":\"Claire Stajol\",\"_id\":\"5c1e6650-654f-11eb-a2e5-fd01fad4824a\"},\"comment\":\"ok\",\"time\":1612428173382,\"_version\":\"3.1.0\"},{\"fromState\":\"Draft\",\"toState\":\"In Review\",\"user\":{\"name\":\"Claire Stajol\",\"_id\":\"5c1e6650-654f-11eb-a2e5-fd01fad4824a\"},\"comment\":\"ok\",\"time\":1612428294413,\"_version\":\"3.1.0\"},{\"fromState\":\"In Review\",\"toState\":\"Draft\",\"user\":{\"name\":\"Claire Stajol\",\"_id\":\"5c1e6650-654f-11eb-a2e5-fd01fad4824a\"},\"comment\":\"ok\",\"time\":1612429611882,\"_version\":\"3.1.0\"},{\"fromState\":\"Draft\",\"toState\":\"In Review\",\"user\":{\"name\":\"Claire Stajol\",\"_id\":\"5c1e6650-654f-11eb-a2e5-fd01fad4824a\"},\"comment\":\"ok\",\"time\":1612429960011,\"_version\":\"3.1.0\"},{\"fromState\":\"In Review\",\"toState\":\"Draft\",\"user\":{\"name\":\"Claire Stajol\",\"_id\":\"5c1e6650-654f-11eb-a2e5-fd01fad4824a\"},\"comment\":\"ok\",\"time\":1612430014792,\"_version\":\"3.1.0\"},{\"fromState\":\"Draft\",\"toState\":\"In Review\",\"user\":{\"name\":\"Claire Stajol\",\"_id\":\"5c1e6650-654f-11eb-a2e5-fd01fad4824a\"},\"comment\":\"ok\",\"time\":1612436720587,\"_version\":\"3.1.0\"},{\"fromState\":\"In Review\",\"toState\":\"Draft\",\"user\":{\"name\":\"Claire Stajol\",\"_id\":\"5c1e6650-654f-11eb-a2e5-fd01fad4824a\"},\"comment\":\"ok\",\"time\":1612436744868,\"_version\":\"3.1.0\"},{\"fromState\":\"Draft\",\"toState\":\"In Review\",\"user\":{\"name\":\"Claire Stajol\",\"_id\":\"5c1e6650-654f-11eb-a2e5-fd01fad4824a\"},\"comment\":\"ok\",\"time\":1612436771099,\"_version\":\"3.1.0\"},{\"fromState\":\"In Review\",\"toState\":\"Draft\",\"user\":{\"name\":\"Claire Stajol\",\"_id\":\"5c1e6650-654f-11eb-a2e5-fd01fad4824a\"},\"comment\":\"ok\",\"time\":1612437171164,\"_version\":\"3.1.0\"},{\"fromState\":\"Draft\",\"toState\":\"In Review\",\"user\":{\"name\":\"Claire Stajol\",\"_id\":\"5c1e6650-654f-11eb-a2e5-fd01fad4824a\"},\"comment\":\"ok\",\"time\":1612442530216,\"_version\":\"3.1.0\"},{\"fromState\":\"In Review\",\"toState\":\"Draft\",\"user\":{\"name\":\"Claire Stajol\",\"_id\":\"5c1e6650-654f-11eb-a2e5-fd01fad4824a\"},\"comment\":\"ok\",\"time\":1612442665968,\"_version\":\"3.1.0\"},{\"fromState\":\"draft\",\"toState\":\"inreview\",\"user\":{\"name\":\"Claire Stajol\",\"_id\":\"5c1e6650-654f-11eb-a2e5-fd01fad4824a\"},\"comment\":\"OK\",\"time\":1612453133040,\"_version\":\"3.1.0\"},{\"fromState\":\"inreview\",\"toState\":\"draft\",\"user\":{\"name\":\"Claire Stajol\",\"_id\":\"5c1e6650-654f-11eb-a2e5-fd01fad4824a\"},\"comment\":\"ok\",\"time\":1612453192526,\"_version\":\"3.1.0\"},{\"fromState\":\"draft\",\"toState\":\"inreview\",\"user\":{\"name\":\"Claire Stajol\",\"_id\":\"5c1e6650-654f-11eb-a2e5-fd01fad4824a\"},\"comment\":\"ok\",\"time\":1612453214813,\"_version\":\"3.1.0\"},{\"fromState\":\"inreview\",\"toState\":\"draft\",\"user\":{\"name\":\"Claire Stajol\",\"_id\":\"5c1e6650-654f-11eb-a2e5-fd01fad4824a\"},\"comment\":\"ok\",\"time\":1612453396637,\"_version\":\"3.1.0\"},{\"fromState\":\"draft\",\"toState\":\"inreview\",\"user\":{\"name\":\"Claire Stajol\",\"_id\":\"5c1e6650-654f-11eb-a2e5-fd01fad4824a\"},\"comment\":\"ok\",\"time\":1612453414458,\"_version\":\"3.1.0\"},{\"fromState\":\"inreview\",\"toState\":\"draft\",\"user\":{\"name\":\"Claire Stajol\",\"_id\":\"5c1e6650-654f-11eb-a2e5-fd01fad4824a\"},\"comment\":\"ok\",\"time\":1612453433514,\"_version\":\"3.1.0\"},{\"fromState\":\"draft\",\"toState\":\"inreview\",\"user\":{\"name\":\"Claire Stajol\",\"_id\":\"5c1e6650-654f-11eb-a2e5-fd01fad4824a\"},\"comment\":\"ok\",\"time\":1612453724779,\"_version\":\"3.1.0\"},{\"fromState\":\"inreview\",\"toState\":\"draft\",\"user\":{\"name\":\"Claire Stajol\",\"_id\":\"5c1e6650-654f-11eb-a2e5-fd01fad4824a\"},\"comment\":\"ok\",\"time\":1612453734438,\"_version\":\"3.1.0\"},{\"fromState\":\"draft\",\"toState\":\"inreview\",\"user\":{\"name\":\"Claire Stajol\",\"_id\":\"5c1e6650-654f-11eb-a2e5-fd01fad4824a\"},\"comment\":\"ok\",\"time\":1612453755567,\"_version\":\"3.1.0\"},{\"fromState\":\"inreview\",\"toState\":\"draft\",\"user\":{\"name\":\"Claire Stajol\",\"_id\":\"5c1e6650-654f-11eb-a2e5-fd01fad4824a\"},\"comment\":\"ok\",\"time\":1612453769773,\"_version\":\"3.1.0\"},{\"fromState\":\"draft\",\"toState\":\"inreview\",\"user\":{\"name\":\"Claire Stajol\",\"_id\":\"5c1e6650-654f-11eb-a2e5-fd01fad4824a\"},\"comment\":\"ok\",\"time\":1612453795639,\"_version\":\"3.1.0\"},{\"fromState\":\"inreview\",\"toState\":\"draft\",\"user\":{\"name\":\"Claire Stajol\",\"_id\":\"5c1e6650-654f-11eb-a2e5-fd01fad4824a\"},\"comment\":\"ok\",\"time\":1612453871768,\"_version\":\"3.1.0\"},{\"fromState\":\"draft\",\"toState\":\"inreview\",\"user\":{\"name\":\"Claire Stajol\",\"_id\":\"5c1e6650-654f-11eb-a2e5-fd01fad4824a\"},\"comment\":\"ok\",\"time\":1612453882367,\"_version\":\"3.1.0\"},{\"fromState\":\"inreview\",\"toState\":\"draft\",\"user\":{\"name\":\"Claire Stajol\",\"_id\":\"5c1e6650-654f-11eb-a2e5-fd01fad4824a\"},\"comment\":\"ok\",\"time\":1612454165282,\"_version\":\"3.1.0\"},{\"fromState\":\"draft\",\"toState\":\"inreview\",\"user\":{\"name\":\"Claire Stajol\",\"_id\":\"5c1e6650-654f-11eb-a2e5-fd01fad4824a\"},\"comment\":\"ok\",\"time\":1612454176147,\"_version\":\"3.1.0\"},{\"fromState\":\"inreview\",\"toState\":\"draft\",\"user\":{\"name\":\"Claire Stajol\",\"_id\":\"5c1e6650-654f-11eb-a2e5-fd01fad4824a\"},\"comment\":\"ok\",\"time\":1612454526412,\"_version\":\"3.1.0\"},{\"fromState\":\"draft\",\"toState\":\"inreview\",\"user\":{\"name\":\"Claire Stajol\",\"_id\":\"5c1e6650-654f-11eb-a2e5-fd01fad4824a\"},\"comment\":\"ok\",\"time\":1612454535466,\"_version\":\"3.1.0\"},{\"fromState\":\"inreview\",\"toState\":\"draft\",\"user\":{\"name\":\"Claire Stajol\",\"_id\":\"5c1e6650-654f-11eb-a2e5-fd01fad4824a\"},\"comment\":\"ok\",\"time\":1612454583985,\"_version\":\"3.1.0\"},{\"fromState\":\"draft\",\"toState\":\"inreview\",\"user\":{\"name\":\"Claire Stajol\",\"_id\":\"5c1e6650-654f-11eb-a2e5-fd01fad4824a\"},\"comment\":\"ok\",\"time\":1612454590241,\"_version\":\"3.1.0\"},{\"fromState\":\"inreview\",\"toState\":\"draft\",\"user\":{\"name\":\"Claire Stajol\",\"_id\":\"5c1e6650-654f-11eb-a2e5-fd01fad4824a\"},\"comment\":\"ok\",\"time\":1612454601837,\"_version\":\"3.1.0\"},{\"fromState\":\"draft\",\"toState\":\"inreview\",\"user\":{\"name\":\"Claire Stajol\",\"_id\":\"5c1e6650-654f-11eb-a2e5-fd01fad4824a\"},\"comment\":\"ok\",\"time\":1612454722629,\"_version\":\"3.1.0\"},{\"fromState\":\"inreview\",\"toState\":\"draft\",\"user\":{\"name\":\"Claire Stajol\",\"_id\":\"5c1e6650-654f-11eb-a2e5-fd01fad4824a\"},\"comment\":\"ok\",\"time\":1612454751155,\"_version\":\"3.1.0\"},{\"fromState\":\"draft\",\"toState\":\"inreview\",\"user\":{\"name\":\"Claire Stajol\",\"_id\":\"5c1e6650-654f-11eb-a2e5-fd01fad4824a\"},\"comment\":\"ok\",\"time\":1612531531645,\"_version\":\"3.1.0\"},{\"fromState\":\"inreview\",\"toState\":\"released\",\"user\":{\"name\":\"Claire Stajol\",\"_id\":\"5c1e6650-654f-11eb-a2e5-fd01fad4824a\"},\"comment\":\"ok\",\"time\":1612531538639,\"_version\":\"3.1.0\"}]",
 					"_versionedOn": 1612367465992,
 					"_lockedOn": 1613467892070,
 					"_createdByName": "Claire Stajol",
@@ -1948,7 +1949,7 @@ module.exports.dataStore = {
 
 		],
 		"values": {
-			"partCount": 125
+			"partCount": 126
 		}
 	},
 	"userCount": {
@@ -2097,6 +2098,209 @@ module.exports.dataStore = {
 					"_lockable": true,
 					"_version": "1.0.0",
 					"_modifiedOn": 1621235888302
+				}
+			},
+			"190": {
+				"identity": 190,
+				"labels": [
+					"file"
+				],
+				"properties": {
+					"_createdOn": 1619175897488,
+					"_lockedByName": "Claire Stajol",
+					"filesize": 305,
+					"_createdBy": "5c1e6650-654f-11eb-a2e5-fd01fad4824a",
+					"url": "https://ganister.s3.eu-west-3.amazonaws.com/2021/4/1619175896584-ganisterInfos.txt",
+					"_lockState": true,
+					"_promotions": "[]",
+					"_versionedOn": 1619175897488,
+					"_lockedOn": 1619175897488,
+					"_createdByName": "Claire Stajol",
+					"filename": "ganisterInfos.txt",
+					"_state": "active",
+					"mimetype": "text/plain",
+					"_lockedBy": "5c1e6650-654f-11eb-a2e5-fd01fad4824a",
+					"_history": "[]",
+					"_serialized": "[]",
+					"_id": "bd7ba620-a423-11eb-8361-552fa5f7d825",
+					"_lockable": true,
+					"_version": "1"
+				}
+			},
+			"193": {
+				"identity": 193,
+				"labels": [
+					"file"
+				],
+				"properties": {
+					"_createdOn": 1619175686515,
+					"_lockedByName": "Claire Stajol",
+					"filesize": 305,
+					"_createdBy": "5c1e6650-654f-11eb-a2e5-fd01fad4824a",
+					"url": "https://ganister.s3.eu-west-3.amazonaws.com/2021/4/1619175685788-ganisterInfos.txt",
+					"_lockState": true,
+					"_promotions": "[]",
+					"_versionedOn": 1619175686515,
+					"_lockedOn": 1619175686515,
+					"_createdByName": "Claire Stajol",
+					"filename": "ganisterInfos.txt",
+					"_state": "active",
+					"mimetype": "text/plain",
+					"_lockedBy": "5c1e6650-654f-11eb-a2e5-fd01fad4824a",
+					"_history": "[]",
+					"_serialized": "[]",
+					"_id": "3fbbb950-a423-11eb-81dd-5d5cb6f3c7bf",
+					"_lockable": true,
+					"_version": "1"
+				}
+			},
+			"194": {
+				"identity": 194,
+				"labels": [
+					"file"
+				],
+				"properties": {
+					"_createdOn": 1619176725956,
+					"_lockedByName": "Claire Stajol",
+					"filesize": 305,
+					"_createdBy": "5c1e6650-654f-11eb-a2e5-fd01fad4824a",
+					"url": "https://ganister.s3.eu-west-3.amazonaws.com/2021/4/1619176725290-ganisterInfos.txt",
+					"_lockState": true,
+					"_promotions": "[]",
+					"_versionedOn": 1619176725956,
+					"_lockedOn": 1619176725956,
+					"_createdByName": "Claire Stajol",
+					"filename": "ganisterInfos.txt",
+					"_state": "active",
+					"mimetype": "text/plain",
+					"_lockedBy": "5c1e6650-654f-11eb-a2e5-fd01fad4824a",
+					"_history": "[]",
+					"_serialized": "[]",
+					"_id": "ab498740-a425-11eb-a874-3fb3e2e5068f",
+					"_lockable": true,
+					"_version": "1"
+				}
+			},
+			"199": {
+				"identity": 199,
+				"labels": [
+					"file"
+				],
+				"properties": {
+					"_createdOn": 1619176793639,
+					"_lockedByName": "Claire Stajol",
+					"filesize": 305,
+					"_createdBy": "5c1e6650-654f-11eb-a2e5-fd01fad4824a",
+					"url": "https://ganister.s3.eu-west-3.amazonaws.com/2021/4/1619176792081-ganisterInfos.txt",
+					"_lockState": true,
+					"_promotions": "[]",
+					"_versionedOn": 1619176793639,
+					"_lockedOn": 1619176793639,
+					"_createdByName": "Claire Stajol",
+					"filename": "ganisterInfos.txt",
+					"_state": "active",
+					"mimetype": "text/plain",
+					"_lockedBy": "5c1e6650-654f-11eb-a2e5-fd01fad4824a",
+					"_history": "[]",
+					"_serialized": "[]",
+					"_id": "d3a12270-a425-11eb-a05c-abca59a068e2",
+					"_lockable": true,
+					"_version": "1"
+				}
+			},
+			"260": {
+				"identity": 260,
+				"labels": [
+					"file"
+				],
+				"properties": {
+					"sourceKey": "2021/5/1620646924317-RoMeoV2.step",
+					"_createdOn": 1620646925511,
+					"handle": "undefined",
+					"source": "amazonS3",
+					"_createdBy": "a99cf630-654f-11eb-a2e5-fd01fad4824a",
+					"url": "https://ganister.s3.eu-west-3.amazonaws.com/2021/5/1620646924317-RoMeoV2.step",
+					"_lockState": false,
+					"_promotions": [
+
+					],
+					"_versionedOn": 1620646925511,
+					"_createdByName": "Michel Dubois",
+					"size": "9616676",
+					"generated": "{\"source\":\"cadExchanger\",\"data\":{\"name\":\"RoMeoV2 (2).step\",\"size\":9616676,\"owner\":\"5de7d00e2d543100452b9577\",\"parentFolder\":\"5de7d00e2d543100452b9578\",\"sharedWithCount\":0,\"public\":true,\"createdAt\":\"2021-05-10T11:42:08.098Z\",\"updatedAt\":\"2021-05-10T11:42:08.098Z\",\"id\":\"60991c10076809002e28c721\",\"activeRevision\":\"60991c10076809002e28c722\",\"permissions\":\"\"}}",
+					"_state": "active",
+					"name": "RoMeoV2.step",
+					"mimetype": "application/octet-stream",
+					"_tracked": false,
+					"_id": "be84dd70-b184-11eb-804f-abcbfb5eb064",
+					"_lockable": true,
+					"_version": "1.0.0",
+					"status": "undefined"
+				}
+			},
+			"261": {
+				"identity": 261,
+				"labels": [
+					"file"
+				],
+				"properties": {
+					"sourceKey": "2021/5/1621235904200-animatedGanisterLogo.html",
+					"_createdOn": 1621235904526,
+					"handle": "undefined",
+					"source": "amazonS3",
+					"_createdBy": "a99cf630-654f-11eb-a2e5-fd01fad4824a",
+					"url": "https://ganister.s3.eu-west-3.amazonaws.com/2021/5/1621235904200-animatedGanisterLogo.html",
+					"_lockState": false,
+					"_promotions": [
+
+					],
+					"_versionedOn": 1621235904526,
+					"_createdByName": "Michel Dubois",
+					"size": "8337",
+					"_state": "active",
+					"name": "animatedGanisterLogo.html",
+					"mimetype": "text/html",
+					"_tracked": false,
+					"_id": "115e62e0-b6e0-11eb-97ac-ebcf5d5af09a",
+					"_lockable": true,
+					"_version": "1.0.0",
+					"status": "undefined"
+				}
+			},
+			"262": {
+				"identity": 262,
+				"labels": [
+					"file"
+				],
+				"properties": {
+					"_checkedOut": true,
+					"sourceKey": "2021/5/1621261639660-export(2).xlsx",
+					"_createdOn": 1621261048444,
+					"source": "amazonS3",
+					"_createdBy": "a99cf630-654f-11eb-a2e5-fd01fad4824a",
+					"_lockState": false,
+					"_createdByName": "Michel Dubois",
+					"_checkedOutOn": 1621262589550,
+					"_tracked": false,
+					"_checkedOutByName": "Michel Dubois",
+					"_lockable": true,
+					"_version": "1.0.0",
+					"_modifiedOn": 1621261639964,
+					"handle": "undefined",
+					"encoding": "7bit",
+					"_checkedOutBy": "a99cf630-654f-11eb-a2e5-fd01fad4824a",
+					"url": "https://ganister.s3.eu-west-3.amazonaws.com/2021/5/1621261639660-export%282%29.xlsx",
+					"_promotions": [
+
+					],
+					"_versionedOn": 1621261048444,
+					"filename": "export(2).xlsx",
+					"size": 16213,
+					"_state": "active",
+					"name": "export (2).xlsx",
+					"mimetype": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+					"_id": "9c4fcbc0-b71a-11eb-b4a0-57cc6016a230",
+					"status": "undefined"
 				}
 			},
 			"268": {
@@ -2256,6 +2460,93 @@ module.exports.dataStore = {
 					"_lockable": true,
 					"_version": "1.0.0",
 					"_modifiedOn": 1616772914151
+				}
+			},
+			"454": {
+				"identity": 454,
+				"labels": [
+					"file"
+				],
+				"properties": {
+					"sourceKey": "2021/5/1621859897356-S1000D_Issue_5.0.pdf",
+					"_createdOn": 1621859899921,
+					"handle": "undefined",
+					"source": "amazonS3",
+					"_createdBy": "a99cf630-654f-11eb-a2e5-fd01fad4824a",
+					"url": "https://ganister.s3.eu-west-3.amazonaws.com/2021/5/1621859897356-S1000D_Issue_5.0.pdf",
+					"_lockState": false,
+					"_promotions": [
+
+					],
+					"_versionedOn": 1621859899921,
+					"_createdByName": "Michel Dubois",
+					"size": "9326853",
+					"_state": "active",
+					"name": "S1000D_Issue_5.0.pdf",
+					"mimetype": "application/pdf",
+					"_tracked": false,
+					"_id": "eb9b7810-bc8c-11eb-8a52-e53ebdf915fa",
+					"_lockable": true,
+					"_version": "1.0.0",
+					"status": "undefined"
+				}
+			},
+			"455": {
+				"identity": 455,
+				"labels": [
+					"file"
+				],
+				"properties": {
+					"sourceKey": "2021/5/1621859938374-S1000D Issue 5.0 Bike Sample Data Set.zip",
+					"_createdOn": 1621859938936,
+					"handle": "undefined",
+					"source": "amazonS3",
+					"_createdBy": "a99cf630-654f-11eb-a2e5-fd01fad4824a",
+					"url": "https://ganister.s3.eu-west-3.amazonaws.com/2021/5/1621859938374-S1000D%20Issue%205.0%20Bike%20Sample%20Data%20Set.zip",
+					"_lockState": false,
+					"_promotions": [
+
+					],
+					"_versionedOn": 1621859938936,
+					"_createdByName": "Michel Dubois",
+					"size": "1480677",
+					"_state": "active",
+					"name": "S1000D Issue 5.0 Bike Sample Data Set.zip",
+					"mimetype": "application/x-zip-compressed",
+					"_tracked": false,
+					"_id": "02dc8870-bc8d-11eb-8a52-e53ebdf915fa",
+					"_lockable": true,
+					"_version": "1.0.0",
+					"status": "undefined"
+				}
+			},
+			"456": {
+				"identity": 456,
+				"labels": [
+					"file"
+				],
+				"properties": {
+					"sourceKey": "2021/5/1621860024403-ad-pag-mbd-bom-pp-4.0.pdf",
+					"_createdOn": 1621860024821,
+					"handle": "undefined",
+					"source": "amazonS3",
+					"_createdBy": "a99cf630-654f-11eb-a2e5-fd01fad4824a",
+					"url": "https://ganister.s3.eu-west-3.amazonaws.com/2021/5/1621860024403-ad-pag-mbd-bom-pp-4.0.pdf",
+					"_lockState": false,
+					"_promotions": [
+
+					],
+					"_versionedOn": 1621860024821,
+					"_createdByName": "Michel Dubois",
+					"size": "1033311",
+					"_state": "active",
+					"name": "ad-pag-mbd-bom-pp-4.0.pdf",
+					"mimetype": "application/pdf",
+					"_tracked": false,
+					"_id": "360db250-bc8d-11eb-8a52-e53ebdf915fa",
+					"_lockable": true,
+					"_version": "1.0.0",
+					"status": "undefined"
 				}
 			},
 			"523": {
@@ -2421,6 +2712,90 @@ module.exports.dataStore = {
 			{
 				"type": "Relationship",
 				"label": "contains",
+				"source": 523,
+				"target": 199,
+				"content": {
+					"identity": 947,
+					"start": 523,
+					"end": 199,
+					"type": "contains",
+					"properties": {
+						"_isEffective": true,
+						"_createdByName": "Claire Stajol",
+						"_createdOn": 1619176794168,
+						"_rootRelId": "d3f44b80-a425-11eb-a05c-abca59a068e2",
+						"_isLatest": true,
+						"_createdBy": "5c1e6650-654f-11eb-a2e5-fd01fad4824a",
+						"_id": "d3f44b80-a425-11eb-a05c-abca59a068e2"
+					}
+				}
+			},
+			{
+				"type": "Relationship",
+				"label": "contains",
+				"source": 523,
+				"target": 194,
+				"content": {
+					"identity": 945,
+					"start": 523,
+					"end": 194,
+					"type": "contains",
+					"properties": {
+						"_isEffective": true,
+						"_createdByName": "Claire Stajol",
+						"_createdOn": 1619176726646,
+						"_rootRelId": "abb54160-a425-11eb-a874-3fb3e2e5068f",
+						"_isLatest": true,
+						"_createdBy": "5c1e6650-654f-11eb-a2e5-fd01fad4824a",
+						"_id": "abb54160-a425-11eb-a874-3fb3e2e5068f"
+					}
+				}
+			},
+			{
+				"type": "Relationship",
+				"label": "contains",
+				"source": 523,
+				"target": 190,
+				"content": {
+					"identity": 943,
+					"start": 523,
+					"end": 190,
+					"type": "contains",
+					"properties": {
+						"_isEffective": true,
+						"_createdByName": "Claire Stajol",
+						"_createdOn": 1619175898508,
+						"_rootRelId": "be196cc0-a423-11eb-8361-552fa5f7d825",
+						"_isLatest": true,
+						"_createdBy": "5c1e6650-654f-11eb-a2e5-fd01fad4824a",
+						"_id": "be196cc0-a423-11eb-8361-552fa5f7d825"
+					}
+				}
+			},
+			{
+				"type": "Relationship",
+				"label": "contains",
+				"source": 523,
+				"target": 193,
+				"content": {
+					"identity": 938,
+					"start": 523,
+					"end": 193,
+					"type": "contains",
+					"properties": {
+						"_isEffective": true,
+						"_createdByName": "Claire Stajol",
+						"_createdOn": 1619175687206,
+						"_rootRelId": "40274c60-a423-11eb-81dd-5d5cb6f3c7bf",
+						"_isLatest": true,
+						"_createdBy": "5c1e6650-654f-11eb-a2e5-fd01fad4824a",
+						"_id": "40274c60-a423-11eb-81dd-5d5cb6f3c7bf"
+					}
+				}
+			},
+			{
+				"type": "Relationship",
+				"label": "contains",
 				"source": 268,
 				"target": 46,
 				"content": {
@@ -2463,6 +2838,48 @@ module.exports.dataStore = {
 			{
 				"type": "Relationship",
 				"label": "contains",
+				"source": 159,
+				"target": 261,
+				"content": {
+					"identity": 754,
+					"start": 159,
+					"end": 261,
+					"type": "contains",
+					"properties": {
+						"_isEffective": true,
+						"_createdByName": "Michel Dubois",
+						"_createdOn": 1621235906902,
+						"_rootRelId": "12c8ef60-b6e0-11eb-97ac-ebcf5d5af09a",
+						"_isLatest": true,
+						"_createdBy": "a99cf630-654f-11eb-a2e5-fd01fad4824a",
+						"_id": "12c8ef60-b6e0-11eb-97ac-ebcf5d5af09a"
+					}
+				}
+			},
+			{
+				"type": "Relationship",
+				"label": "contains",
+				"source": 159,
+				"target": 260,
+				"content": {
+					"identity": 811,
+					"start": 159,
+					"end": 260,
+					"type": "contains",
+					"properties": {
+						"_isEffective": true,
+						"_createdByName": "Michel Dubois",
+						"_createdOn": 1620646928104,
+						"_rootRelId": "c0108680-b184-11eb-804f-abcbfb5eb064",
+						"_isLatest": true,
+						"_createdBy": "a99cf630-654f-11eb-a2e5-fd01fad4824a",
+						"_id": "c0108680-b184-11eb-804f-abcbfb5eb064"
+					}
+				}
+			},
+			{
+				"type": "Relationship",
+				"label": "contains",
 				"source": 268,
 				"target": 57,
 				"content": {
@@ -2478,6 +2895,90 @@ module.exports.dataStore = {
 						"_isLatest": true,
 						"_createdBy": "a99cf630-654f-11eb-a2e5-fd01fad4824a",
 						"_id": "115f7e60-c1e3-11eb-b1c9-b3a6d5844935"
+					}
+				}
+			},
+			{
+				"type": "Relationship",
+				"label": "contains",
+				"source": 57,
+				"target": 456,
+				"content": {
+					"identity": 894,
+					"start": 57,
+					"end": 456,
+					"type": "contains",
+					"properties": {
+						"_isEffective": true,
+						"_createdByName": "Michel Dubois",
+						"_createdOn": 1621860025715,
+						"_rootRelId": "36961c30-bc8d-11eb-8a52-e53ebdf915fa",
+						"_isLatest": true,
+						"_createdBy": "a99cf630-654f-11eb-a2e5-fd01fad4824a",
+						"_id": "36961c30-bc8d-11eb-8a52-e53ebdf915fa"
+					}
+				}
+			},
+			{
+				"type": "Relationship",
+				"label": "contains",
+				"source": 57,
+				"target": 455,
+				"content": {
+					"identity": 964,
+					"start": 57,
+					"end": 455,
+					"type": "contains",
+					"properties": {
+						"_isEffective": true,
+						"_createdByName": "Michel Dubois",
+						"_createdOn": 1621859939686,
+						"_rootRelId": "034f2060-bc8d-11eb-8a52-e53ebdf915fa",
+						"_isLatest": true,
+						"_createdBy": "a99cf630-654f-11eb-a2e5-fd01fad4824a",
+						"_id": "034f2060-bc8d-11eb-8a52-e53ebdf915fa"
+					}
+				}
+			},
+			{
+				"type": "Relationship",
+				"label": "contains",
+				"source": 57,
+				"target": 454,
+				"content": {
+					"identity": 675,
+					"start": 57,
+					"end": 454,
+					"type": "contains",
+					"properties": {
+						"_isEffective": true,
+						"_createdByName": "Michel Dubois",
+						"_createdOn": 1621859902031,
+						"_rootRelId": "ecdd6df0-bc8c-11eb-8a52-e53ebdf915fa",
+						"_isLatest": true,
+						"_createdBy": "a99cf630-654f-11eb-a2e5-fd01fad4824a",
+						"_id": "ecdd6df0-bc8c-11eb-8a52-e53ebdf915fa"
+					}
+				}
+			},
+			{
+				"type": "Relationship",
+				"label": "contains",
+				"source": 57,
+				"target": 262,
+				"content": {
+					"identity": 956,
+					"start": 57,
+					"end": 262,
+					"type": "contains",
+					"properties": {
+						"_isEffective": true,
+						"_createdByName": "Michel Dubois",
+						"_createdOn": 1621261049063,
+						"_rootRelId": "9cae3f70-b71a-11eb-b4a0-57cc6016a230",
+						"_isLatest": true,
+						"_createdBy": "a99cf630-654f-11eb-a2e5-fd01fad4824a",
+						"_id": "9cae3f70-b71a-11eb-b4a0-57cc6016a230"
 					}
 				}
 			},
