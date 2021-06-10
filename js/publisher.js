@@ -4,7 +4,7 @@ const { htmlStyle } = require('./publisher.styles')
 let locale = "fr-FR";
 
 /**
- * 
+ * produce
  * @param {*} dataStore 
  * @param {*} template 
  * @returns 
@@ -73,8 +73,9 @@ async function produce(dataStore, template) {
 
 
 /**
- * 
- * @param {*} dataStore 
+ * convertStoreToTableRows
+ * @param {*} dataStoreElement 
+ * @param {*} templateBlock 
  */
 function convertStoreToTableRows(dataStoreElement, templateBlock) {
   const tableRows = [];
@@ -96,7 +97,15 @@ function convertStoreToTableRows(dataStoreElement, templateBlock) {
   return tableRows;
 }
 
-
+/**
+ * rowRecursiveHandler
+ * @param {*} rootElement 
+ * @param {*} nodes 
+ * @param {*} edges 
+ * @param {*} level 
+ * @param {*} templateBlock 
+ * @param {*} tableRows 
+ */
 function rowRecursiveHandler(rootElement, nodes, edges, level, templateBlock, tableRows) {
 
   level++;
@@ -132,7 +141,7 @@ function rowRecursiveHandler(rootElement, nodes, edges, level, templateBlock, ta
 }
 
 /**
- * 
+ * buildReportTable
  * @param {*} templateBlock 
  * @param {*} dataStore 
  * @returns 
@@ -290,7 +299,7 @@ function buildReportTable(templateBlock, dataStore) {
 
 
 /**
- * 
+ * buildReportField
  * @param {*} templateBlock 
  * @param {*} dataStore 
  * @returns 
@@ -317,9 +326,10 @@ function buildReportField(templateBlock, dataStore) {
 
 
 /**
- * 
+ * getMappedResult
  * @param {*} dataStore 
  * @param {*} mapping 
+ * @param {*} datatype 
  * @returns 
  */
 function getMappedResult(dataStore, mapping, datatype) {
@@ -346,9 +356,11 @@ function getMappedResult(dataStore, mapping, datatype) {
 
 
 /**
- * 
+ * getTableMappedResult
  * @param {*} dataStore 
+ * @param {*} graphType 
  * @param {*} mapping 
+ * @param {*} children 
  * @returns 
  */
 function getTableMappedResult(dataStore, graphType, mapping, children = false) {
@@ -387,10 +399,9 @@ function getTableMappedResult(dataStore, graphType, mapping, children = false) {
 
 
 /**
- * 
+ * resolveMapping
  * @param {*} dataStore 
  * @param {*} mapping 
- * @param {*} datatype
  * @returns 
  */
 function resolveMapping(dataStore, mapping) {
@@ -437,7 +448,7 @@ function humanFileSize(bytes, si) {
 
 
 /**
- * 
+ * formatValue
  * @param {*} value 
  * @param {*} type 
  */
@@ -470,10 +481,10 @@ function formatValue(value, type) {
 
 
 /**
- * 
+ * buildReportHeader
  * @param {*} userName 
- * @param {*} title 
- * @param {*} subtitle 
+ * @param {*} [title='Report'] 
+ * @param {*} [subtitle='Report Name'] 
  * @returns 
  */
 function buildReportHeader(userName, title = 'Report', subtitle = 'Report Name') {

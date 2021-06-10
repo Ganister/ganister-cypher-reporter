@@ -96,6 +96,13 @@ const optionsSchema = Joi.object({
 });
 ```
 
+|  Parameters | Explanation  |  
+|---|---|
+| inlineRelationships |  In the report template you can define an array of relationships which will be handled as inlineRelationships in a table. If true, whenever such relationship is met, the children of these relationships will appear in a cell to the right of their parent node. If False, then for each child a new row is appended under the parent row.| 
+|   |   | 
+
+
+
 ### Output
 
 For now we only support 'html' as an output.
