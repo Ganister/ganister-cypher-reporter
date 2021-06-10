@@ -14,6 +14,7 @@ const optionsSchema = Joi.object({
       type: Joi.string().allow('field', 'table', 'graph').required(),
       datatype :Joi.string(),
       mapping: Joi.string(),
+      inlineRelationships: Joi.array().items(Joi.string()),
       columns: Joi.array().items(Joi.object({
         graphType: Joi.string(),
         indentation: Joi.boolean(),
