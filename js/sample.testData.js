@@ -44,26 +44,31 @@ const driver = neo4j.driver(db.boltURL, neo4j.auth.basic(
 
 const template = {
   name: 'test template',
+  locale : "fr-FR",
+  author: 'Yoann Maingon',
   items: [
     {
       id: 1,
       type: 'field',
       mapping: 'partCount.values.partCount',
-      width: '4',
+      datatype: 'integer',
+      width: '2',
       title: '# Parts'
     },
     {
       id: 3,
       type: 'field',
       mapping: 'documentCount.values.documentCount',
-      width: '4',
+      datatype: 'integer',
+      width: '2',
       title: '# Documents'
     },
     {
       id: 4,
       type: 'field',
       mapping: 'userCount.values.userCount',
-      width: '4',
+      datatype: 'integer',
+      width: '2',
       title: '# Users'
     },
     {
@@ -71,30 +76,87 @@ const template = {
       type: 'table',
       mapping: 'partBom',
       width: '12',
-      title: 'Document Listing',
+      title: 'Part BOM and Documents',
+      inlineRelationships: ['contains'],
       columns: [
         {
-          field: {
-            'part': 'properties._ref'
-          },
-          label: 'Reference',
+          graphType: 'node',
+          indentation: true,
+          fields: { part: { map: '_level', datatype: 'level' }, user: { map: '_level', datatype: 'level' } },
+          label: 'Level',
+          width: 120,
         },
         {
-          field: {
-            'part': 'properties.name'
+          graphType: 'node',
+          fields: {
+            part: { map: 'properties._ref', datatype: 'string' },
+            user: { map: 'properties.lastName', datatype: 'string' }
           },
+          label: 'Ref',
+          width: 130,
+        },
+        {
+          graphType: 'node',
+          fields: { part: { map: 'properties.name', datatype: 'string' } },
           label: 'Name',
+          width: 160,
         },
         {
-          field: {
-            'part': 'properties._createdByName'
-          },
+          graphType: 'node',
+          fields: { part: { map: 'properties._createdByName', datatype: 'string' } },
           label: 'Created By',
+          width: 150,
         },
         {
-          field: 'properties._modifiedBy',
-          label: 'Modified By',
+          graphType: 'node',
+          fields: { part: { map: 'properties._createdOn', datatype: 'date' } },
+          label: 'Created On',
+          width: 160,
         },
+        {
+          columns: [
+            {
+              graphType: 'node',
+              fields: { document: { map: 'node.properties._ref', datatype: 'string' } },
+              label: 'Ref Doc',
+              width: 200,
+            },
+            {
+              graphType: 'node',
+              fields: { document: { map: 'node.properties.name', datatype: 'string' } },
+              label: 'Title Doc',
+              width: 200,
+            },
+            {
+              columns: [
+                {
+                  graphType: 'node',
+                  fields: { file: { map: 'node.properties.filename', datatype: 'string' } },
+                  label: 'File Ref',
+                  width: 200,
+                },
+                {
+                  graphType: 'node',
+                  fields: { file: { map: 'node.properties.filesize', datatype: 'filesize' } },
+                  label: 'FileSize',
+                  width: 200,
+                },
+                {
+                  graphType: 'node',
+                  fields: { file: { map: 'node.properties.name', datatype: 'string' } },
+                  label: 'Name',
+                  width: 300,
+                },
+              ]
+            },
+          ]
+        },
+        // {
+        //   graphType: 'node',
+        //   fields: { user: { map: 'properties.email', datatype: 'email' } },
+        //   label: 'email',
+        //   width: 200,
+        // },
       ]
     }
   ]

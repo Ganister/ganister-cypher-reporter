@@ -15,7 +15,6 @@ async function runQueries(queries, cypherDriver) {
   const data = await Promise.all(queryPromises);
   if (data) {
     data.forEach((res) => {
-      console.log("LOG / file: cypherQueries.js / line 19 / data.forEach / res", res);
       dataStore[res.id] = res.data;
     });
   }

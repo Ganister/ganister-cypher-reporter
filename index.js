@@ -4,14 +4,24 @@ const cyq = require('./js/cypherQueries');
 const builder = require('./js/template');
 const publisher = require('./js/publisher');
 
+
 const optionsSchema = Joi.object({
-  queries: Joi.array(),
+  queries: Joi.array().required(),
   template: Joi.object({
-    name: Joi.string(),
+    name: Joi.string().required(),
     items: Joi.array().items(Joi.object({
-      id: Joi.number(),
-      type: Joi.string().allow('field', 'table', 'graph'),
+      id: Joi.number().required(),
+      type: Joi.string().allow('field', 'table', 'graph').required(),
+      datatype :Joi.string(),
       mapping: Joi.string(),
+      columns: Joi.array().items(Joi.object({
+        graphType: Joi.string(),
+        indentation: Joi.boolean(),
+        fields: Joi.object(),
+        label: Joi.string(),
+        width: Joi.number(),
+        columns: Joi.array().items(Joi.link('#column')),
+      }).id('column')),
       width: Joi.string().allow('1', '2', '3', '4', '5', '6'),
       title: Joi.string(),
     })),
@@ -37,4 +47,5 @@ async function buildReport(options) {
 
 
 
+module.exports.optionsSchema = optionsSchema;
 module.exports.buildReport = buildReport;

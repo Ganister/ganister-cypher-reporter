@@ -72,7 +72,6 @@ const template = {
           width: 160,
         },
         {
-          id: 'Docs',
           columns: [
             {
               graphType: 'node',
@@ -87,7 +86,6 @@ const template = {
               width: 200,
             },
             {
-              id: 'Files',
               columns: [
                 {
                   graphType: 'node',
@@ -171,6 +169,7 @@ test('Recursive Test 2', async () => {
   expect(publisher.getMappedResult(dataSet, 'h')).toBe(null);
 
 });
+
 
 test('Produce an HTML report', async () => {
   const report = await publisher.produce(dataStore, template);
