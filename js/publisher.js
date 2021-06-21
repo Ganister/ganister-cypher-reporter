@@ -79,7 +79,7 @@ async function produce(dataStore, template) {
  */
 function convertStoreToTableRows(dataStoreElement, templateBlock) {
   const tableRows = [];
-  const { nodes, edges } = dataStoreElement;
+  const { nodes = [], edges = [] } = dataStoreElement;
 
   // retrieve root elements 
   const rootElements = { ...nodes };
@@ -215,7 +215,7 @@ function buildReportTable(templateBlock, dataStore) {
               rowBlock.content.push({
                 type: 'div',
                 attributes: { class: 'td', field: col.label, style: `min-width:${col.width}px;width:${col.width}px;` },
-                content: '' + getTableMappedResult(tableRow, col.graphType, col.fields) + '',
+                content: '' + getTableMappedResult(tableRow, col.graphType, col.fields) + ' ',
               });
             }
           }
