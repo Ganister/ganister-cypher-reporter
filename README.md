@@ -126,3 +126,6 @@ Evolution of features are listed on the [project kanban board](https://github.co
 
 ## Semver
 Until ganister-cypher-reporter reaches a 1.0.0 release, breaking changes will be released with a new minor version.
+
+## todo
+- [] retrieve relationship value
