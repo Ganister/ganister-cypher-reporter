@@ -113,19 +113,6 @@ function parseQueryResult(result) {
                   break;
                 case 'Node':
                   if (!nodes[obj.identity]) nodes[obj.identity] = obj;
-                  // if (index > 0 && currentLastRowItem) {
-                  //   if (!edges.find(edge => edge.content.identity === currentLastRowItem.identity + '-' + obj.identity)) {
-                  //     // add relationship from currentLastRowItem to actual item
-                  //     edges.push({
-                  //       type: 'Node',
-                  //       source: currentLastRowItem.identity,
-                  //       target: obj.identity,
-                  //       content: {
-                  //         identity: currentLastRowItem.identity + '-' + obj.identity
-                  //       },
-                  //     });
-                  //   }
-                  // }
                   currentLastRowItem = obj;
                   break;
                 case 'Number':

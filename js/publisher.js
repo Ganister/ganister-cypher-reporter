@@ -454,27 +454,34 @@ function humanFileSize(bytes, si) {
  */
 function formatValue(value, type) {
   let formattedValue = value;
-  switch (type) {
-    case 'string':
-      formattedValue = value;
-      break;
-    case 'filesize':
-      formattedValue = humanFileSize(value, true);
-      break;
-    case 'date':
-      formattedValue = new Date(value).toLocaleDateString(locale);
-      break;
-    case 'boolean':
-      if (!!JSON.parse(value)) {
-        formattedValue = "✔️";
-      } else {
-        formattedValue = "❌";
-      }
-      break;
-    default:
-      formattedValue = value;
-      break;
+  if (value && value != "") {
+    switch (type) {
+      case 'string':
+        formattedValue = value;
+        break;
+      case 'filesize':
+        if (value) {
+          formattedValue = humanFileSize(value, true);
+        }
+        break;
+      case 'date':
+        formattedValue = new Date(value).toLocaleDateString(locale);
+        break;
+      case 'boolean':
+        if (!!JSON.parse(value)) {
+          formattedValue = "✔️";
+        } else {
+          formattedValue = "❌";
+        }
+        break;
+      default:
+        formattedValue = value;
+        break;
+    }
+  } else {
+    formattedValue = " ";
   }
+
   return formattedValue;
 }
 
