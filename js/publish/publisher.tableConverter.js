@@ -104,7 +104,6 @@ function buildReportTable(templateBlock, dataStore) {
   }
   tableBlockContent.push(headerBlock);
 
-  const indentationColumns = 5;
 
   // Add Data
   const tableRows = convertStoreToTableRows(dataStore[templateBlock.mapping], templateBlock);
@@ -123,14 +122,14 @@ function buildReportTable(templateBlock, dataStore) {
 
               // Handle indentation column
               const indentCases = [];
-              for (let i = 1; i < indentationColumns + 1; i++) {
+              for (let i = 1; i < global.indentationColumns + 1; i++) {
                 let cross = ' ';
                 if (i == getTableMappedResult(tableRow, col.graphType, col.fields)) {
                   cross = '' + getTableMappedResult(tableRow, col.graphType, col.fields) + '';
                 }
                 indentCases.push({
                   type: 'td',
-                  attributes: { class: 'td level', field: col.label, style: `text-align: center;min-width:${(col.width / indentationColumns) - 2}px;width:${(col.width / indentationColumns) - 2}px;` },
+                  attributes: { class: 'td level', field: col.label, style: `text-align: center;min-width:${(col.width / global.indentationColumns) - 2}px;width:${(col.width / global.indentationColumns) - 2}px;` },
                   content: cross,
                 });
               }

@@ -1,7 +1,7 @@
 const htmlCreator = require('html-creator');
 const path = require('path');
 const { htmlStyle } = require('./publisher.styles')
-const { resolveMapping , getMappedResult } = require('./publisher.utils')
+const { resolveMapping, getMappedResult } = require('./publisher.utils')
 const { buildReportTable } = require('./publisher.tableConverter')
 global.locale = "fr-FR";
 
@@ -16,6 +16,7 @@ async function produce(dataStore, template) {
   // init
   const htmlCreatorContent = [];
   global.locale = template.locale;
+  global.indentationColumns = template.indentationColumns || 8;
 
   // build header
   const head = {

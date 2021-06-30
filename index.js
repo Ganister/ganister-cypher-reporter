@@ -9,11 +9,12 @@ const optionsSchema = Joi.object({
   template: Joi.object({
     name: Joi.string().required(),
     locale: Joi.string().required(),
+    indentationColumns: Joi.number(),
     author: Joi.string().required(),
     items: Joi.array().items(Joi.object({
       id: Joi.number().required(),
       type: Joi.string().allow('field', 'table', 'graph').required(),
-      datatype :Joi.string(),
+      datatype: Joi.string(),
       mapping: Joi.string(),
       inlineRelationships: Joi.array().items(Joi.string()),
       columns: Joi.array().items(Joi.object({
@@ -27,9 +28,9 @@ const optionsSchema = Joi.object({
       width: Joi.string().allow('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'),
       title: Joi.string(),
     })),
-  }),
+  }).required(),
   output: Joi.string().allow('pdf', 'html'),
-  cypherDriver: Joi.object(),
+  cypherDriver: Joi.object().required(),
 });
 
 
