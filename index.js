@@ -1,8 +1,7 @@
 
 const Joi = require('joi');
-const cyq = require('./js/cypherQueries');
-const builder = require('./js/template');
-const publisher = require('./js/publisher');
+const cyq = require('./js/query/cypherQueries');
+const publisher = require('./js/publish/publisher');
 
 
 const optionsSchema = Joi.object({
@@ -25,7 +24,7 @@ const optionsSchema = Joi.object({
         width: Joi.number(),
         columns: Joi.array().items(Joi.link('#column')),
       }).id('column')),
-      width: Joi.string().allow('1', '2', '3', '4', '5', '6'),
+      width: Joi.string().allow('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'),
       title: Joi.string(),
     })),
   }),

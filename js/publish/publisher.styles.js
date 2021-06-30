@@ -1,6 +1,7 @@
 module.exports.htmlStyle = `  
 .td {
-  padding: 2px 6px;
+  padding: 2px 4px;
+  border-left: 1px solid rgba(0,0,0,0.3)
 }
 
 .td.level{
@@ -18,7 +19,20 @@ module.exports.htmlStyle = `
   min-height: 23px;
 }
 .tr > .td,.tr > .th  {
-  border-bottom: solid 1px #DDD;
+  /*border-bottom: solid 1px #DDD;*/
+}
+
+td > table > tbody > tr:last-child {
+  border: none;
+}
+
+
+
+.indentLine {
+  border: none;
+}
+.indentLine > td:first-child {
+  border: none;
 }
 
 .th {
@@ -30,6 +44,7 @@ module.exports.htmlStyle = `
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
+  padding: 0;
 }
 
 .indentation > div.td {
@@ -46,6 +61,9 @@ module.exports.htmlStyle = `
 .tr > div.td:last-child {
   border-right: none;
 }
+.tdr {
+  padding: 0;
+}
 
 .tdr > .tr:last-child {
   border-bottom:none;
@@ -58,6 +76,7 @@ module.exports.htmlStyle = `
 }
 td,th{
   padding: 5px 6px;
+  border-radius: 0 !important;
 }
 
 .dataField {

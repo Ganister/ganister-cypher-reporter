@@ -1,6 +1,6 @@
 {
   "name": "ganister-cypher-reporter",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "Report Engine for Graph DB supporting cypher queries",
   "main": "index.js",
   "scripts": {
@@ -15,6 +15,7 @@
   "devDependencies": {
     "dotenv": "^9.0.2",
     "jest": "^26.6.3",
+    "jsdoc": "^3.6.7",
     "neo4j-driver": "^4.2.3"
   }
 }

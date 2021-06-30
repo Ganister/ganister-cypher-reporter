@@ -109,12 +109,6 @@ const template = {
             },
           ]
         },
-        // {
-        //   graphType: 'node',
-        //   fields: { user: { map: 'properties.email', datatype: 'email' } },
-        //   label: 'email',
-        //   width: 200,
-        // },
       ]
     }
   ]
@@ -162,11 +156,11 @@ test('Recursive Test 2', async () => {
     },
     i: 5,
   }
-  expect(publisher.getMappedResult(dataSet, 'a.b.c.d')).toBe(null);
+  expect(publisher.getMappedResult(dataSet, 'a.b.c.d')).toBe(" ");
   expect(publisher.getMappedResult(dataSet, 'a.c.d')).toBe(2);
   expect(publisher.getMappedResult(dataSet, 'a.b')).toBe(1);
   expect(publisher.getMappedResult(dataSet, 'i')).toBe(5);
-  expect(publisher.getMappedResult(dataSet, 'h')).toBe(null);
+  expect(publisher.getMappedResult(dataSet, 'h')).toBe(" ");
 
 });
 

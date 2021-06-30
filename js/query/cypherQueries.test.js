@@ -1,7 +1,7 @@
 require('dotenv').config();
 
 const cyq = require('./cypherQueries');
-const testData = require('./sample.testData');
+const testData = require('../sample.testData');
 
 
 test('Produce a datastore', async () => {
