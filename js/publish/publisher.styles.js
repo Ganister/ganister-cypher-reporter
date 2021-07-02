@@ -1,7 +1,9 @@
 module.exports.htmlStyle = `  
 .td {
   padding: 2px 4px;
-  border-left: 1px solid rgba(0,0,0,0.1)
+  border-left: 1px solid rgba(0,0,0,0.1) ;
+  font-family: helvetica;
+  font-size: 12px;
 }
 
 table {
