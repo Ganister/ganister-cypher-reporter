@@ -45,6 +45,9 @@ td > table > tbody > tr:last-child {
 .th {
   font-weight: bold;
   padding: 8px 4px;
+  position: sticky;
+  top: 0px;
+  background: wheat;
 }
 
 .indentation {
