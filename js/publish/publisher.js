@@ -32,6 +32,7 @@ async function produce(dataStore, template) {
 
 
   // initialize body
+  const reportHeader = buildReportHeader(template.author);
   const body = {
     type: 'body',
     attributes: {
@@ -39,10 +40,7 @@ async function produce(dataStore, template) {
       class: 'reportPage',
     },
     content: [
-      // add report header
-      buildReportHeader(template.author),
       // add hr separation
-      { type: 'hr' },
     ],
   };
 
@@ -64,6 +62,7 @@ async function produce(dataStore, template) {
 
   // Assemble the main document
   htmlCreatorContent.push(head);
+  htmlCreatorContent.push(reportHeader);
   htmlCreatorContent.push(mainDataContent);
 
   // load htmlCreator content
@@ -119,40 +118,45 @@ function buildReportHeader(userName, title = 'Report', subtitle = 'Report Name')
   const date = Date.now();
   const formatedDate = new Intl.DateTimeFormat('fr-FR').format(date);
   const htmlBlock = {
-    type: 'div',
-    attributes: { class: 'row valign-wrapper' },
+    type: 'table',
+    attributes: { class: 'table' },
     content: [
       {
-        type: 'div',
-        attributes: { class: 'col s2 center-align' },
-        content: [{
-          type: 'img',
-          attributes: { class: '', src: 'https://ganister.eu/images/G_50.png' },
-        }],
-      }, {
-        type: 'div',
-        attributes: { class: 'col s8' },
-        content: [{
-          type: 'h4',
-          attributes: { class: '' },
-          content: title,
-        }, {
-          type: 'h2',
-          attributes: { class: '' },
-          content: subtitle,
-        }],
-      }, {
-        type: 'div',
-        attributes: { class: 'col s2' },
-        content: [{
-          type: 'h6',
-          attributes: { class: '' },
-          content: userName,
-        }, {
-          type: 'h6',
-          attributes: { class: '' },
-          content: formatedDate,
-        }],
+        type: 'tr',
+        content: [
+          {
+            type: 'td',
+            attributes: { class: 'col s2 center-align', colspan: '5' },
+            content: [{
+              type: 'img',
+              attributes: { class: '', src: 'https://ganister.eu/images/G_50.png' },
+            }],
+          }, {
+            type: 'td',
+            attributes: { class: 'col s8', colspan: '8' },
+            content: [{
+              type: 'h4',
+              attributes: { class: '' },
+              content: title,
+            }, {
+              type: 'h2',
+              attributes: { class: '' },
+              content: subtitle,
+            }],
+          }, {
+            type: 'td',
+            attributes: { class: 'col s2', colspan: '5' },
+            content: [{
+              type: 'h6',
+              attributes: { class: '' },
+              content: userName,
+            }, {
+              type: 'h6',
+              attributes: { class: '' },
+              content: formatedDate,
+            }],
+          }
+        ]
       }
     ]
   };

@@ -1,22 +1,27 @@
 module.exports.htmlStyle = `  
 .td {
   padding: 2px 4px;
-  border-left: 1px solid rgba(0,0,0,0.3)
+  border-left: 1px solid rgba(0,0,0,0.1)
 }
 
+table {
+  height: 100%;
+  border-collapse: collapse;
+}
 .td.level{
   padding: 0 0;
+  background-color: #eef;
 }
 
 .td > .tr:last-child {
   border-bottom: none;
 }
 .tr {
-  display: flex; 
-  flex-direction: row;
-  flex-wrap: nowrap;
-  align-items: stretch; 
   min-height: 23px;
+}
+
+tr {
+  border-bottom: 1px solid rgba(0,0,0,0.4);
 }
 .tr > .td,.tr > .th  {
   /*border-bottom: solid 1px #DDD;*/
@@ -41,9 +46,6 @@ td > table > tbody > tr:last-child {
 }
 
 .indentation {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
   padding: 0;
 }
 
@@ -69,7 +71,7 @@ td > table > tbody > tr:last-child {
   border-bottom:none;
 }
 .reportPage {
-  padding: 10px 50px;
+  padding: 5px 5px;
 }
 #reportHeader{
   padding-bottom: 20px;

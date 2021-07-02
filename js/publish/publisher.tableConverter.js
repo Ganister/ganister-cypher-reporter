@@ -89,7 +89,7 @@ function buildReportTable(templateBlock, dataStore) {
       columns.forEach((col) => {
         if (col.fields) {
           headerBlock.content.push({
-            type: 'th',
+            type: 'td',
             attributes: { class: 'th', style: `width:${col.width}px;min-width:${col.width}px;` },
             content: col.label,
           });
@@ -139,7 +139,7 @@ function buildReportTable(templateBlock, dataStore) {
                 content: [
                   {
                     type: 'table', content: [
-                      { type: 'tr', attributes:{ class:'indentLine'}, content: indentCases }
+                      { type: 'tr', attributes: { class: 'indentLine' }, content: indentCases }
                     ]
                   }
                 ],
@@ -162,6 +162,7 @@ function buildReportTable(templateBlock, dataStore) {
             }
             if (row.children && row.children.length > 0) {
               const subRowBlockArr = [];
+
               row.children.forEach((childRow) => {
                 const subRowBlock = {
                   type: 'tr',
@@ -183,9 +184,10 @@ function buildReportTable(templateBlock, dataStore) {
                 subRowBlockArr.push(subRowBlock)
               })
 
+              const colspanCount = colspanCounter(subcols);
               const childrenTdDiv = {
                 type: 'td',
-                attributes: { class: 'tdr' },
+                attributes: { class: 'tdr', colspan: `${colspanCount}` },
                 content: [{
                   type: 'table', content: subRowBlockArr
                 }],
@@ -193,29 +195,6 @@ function buildReportTable(templateBlock, dataStore) {
               block.content.push(childrenTdDiv);
             } else {
 
-              // add spacers when no data is available
-              // const subRowArray = [];
-              // const subRowBlockSpacer = {
-              //   type: 'tr',
-              //   attributes: { class: 'tr' },
-              //   content: subRowArray,
-              // }
-              // subcols.forEach((subCol) => {
-              //   if (subCol.columns) {
-              //     handleSubColumns(subCol.columns, {}, subRowBlockSpacer);
-              //   } else {
-              //     subRowArray.push({
-              //       type: 'td',
-              //       attributes: { class: 'td spacer', field: subCol.label, style: `min-width:${subCol.width}px;width:${subCol.width}px;` },
-              //       content: ' ',
-              //     });
-              //   }
-              // });
-              // block.content.push({
-              //   type: 'td',
-              //   attributes: { class: 'tdr', style: 'display: flex;' },
-              //   content: [subRowBlockSpacer],
-              // });
 
             }
           }
@@ -232,6 +211,19 @@ function buildReportTable(templateBlock, dataStore) {
 };
 
 module.exports.buildReportTable = buildReportTable;
+
+
+function colspanCounter(columns) {
+  let counter = 0;
+  columns.forEach((col) => {
+    if (col.columns) {
+      counter = counter + colspanCounter(col.columns);
+    } else {
+      counter = counter + 1;
+    }
+  })
+  return counter;
+}
 
 /**
  * getTableMappedResult
