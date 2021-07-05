@@ -23,6 +23,8 @@ const optionsSchema = Joi.object({
         fields: Joi.object(),
         label: Joi.string(),
         width: Joi.number(),
+        relationships: Joi.array(),
+        nodes: Joi.array(),
         columns: Joi.array().items(Joi.link('#column')),
       }).id('column')),
       width: Joi.string().allow('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'),
@@ -35,17 +37,24 @@ const optionsSchema = Joi.object({
 
 
 async function buildReport(options) {
+
   const { error, value } = optionsSchema.validate(options);
   if (error) return error;
 
   // parse options
+  console.time('ganister-cypher-reporter : parse')
   const { queries, template, output, cypherDriver } = options;
+  console.timeEnd('ganister-cypher-reporter : parse')
 
   // run queries
+  console.time('ganister-cypher-reporter : query')
   const dataStore = await cyq.runQueries(queries, cypherDriver);
+  console.timeEnd('ganister-cypher-reporter : query')
 
   // fill template
+  console.time('ganister-cypher-reporter : produce')
   await publisher.produce(dataStore, template);
+  console.timeEnd('ganister-cypher-reporter : produce')
 }
 
 

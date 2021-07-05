@@ -1,6 +1,7 @@
 
 const { resolveMapping, formatValue } = require('./publisher.utils')
 
+const fs = require('fs');
 /**
  * convertStoreToTableRows
  * @param {*} dataStoreElement 
@@ -16,10 +17,15 @@ function convertStoreToTableRows(dataStoreElement, templateBlock) {
     delete rootElements[edge.target];
   });
 
-
+  // for each root element add a new table row and browser relationships
   for (const [key, value] of Object.entries(rootElements)) {
+
+    // Add Row
     tableRows.push(value);
+
+    // Browse relationships
     rowRecursiveHandler(value, nodes, edges, 0, templateBlock, tableRows);
+
   }
 
   return tableRows;
@@ -42,10 +48,12 @@ function rowRecursiveHandler(rootElement, nodes, edges, level, templateBlock, ta
   delete rootElement.properties._promotions;
   delete rootElement.properties._history;
 
+  // keep relationships of the actual node
+  const relatedEdges = edges.filter((edge) => edge.source === rootElement.identity);
 
   // handle inline relationships
-  edges
-    .filter((edge) => edge.source === rootElement.identity)
+  relatedEdges
+    // look for inline relationships
     .filter((edge) => templateBlock.inlineRelationships.indexOf(edge.label) > -1)
     .forEach((edge) => {
       const subElement = nodes[edge.target];
@@ -58,8 +66,8 @@ function rowRecursiveHandler(rootElement, nodes, edges, level, templateBlock, ta
     });
 
   // handle subline relationships
-  edges
-    .filter((edge) => edge.source === rootElement.identity)
+  relatedEdges
+    // look for non-inline relationships
     .filter((edge) => templateBlock.inlineRelationships.indexOf(edge.label) < 0)
     .forEach((edge) => {
       const subElement = nodes[edge.target];
@@ -107,6 +115,16 @@ function buildReportTable(templateBlock, dataStore) {
 
   // Add Data
   const tableRows = convertStoreToTableRows(dataStore[templateBlock.mapping], templateBlock);
+
+  fs.writeFile("output.json", JSON.stringify(tableRows), 'utf8', function (err) {
+    if (err) {
+      console.log("An error occured while writing JSON Object to File.");
+      return console.log(err);
+    }
+
+    console.log("JSON file has been saved.");
+  });
+
   if (tableRows) {
     tableRows.forEach((tableRow) => {
       const rowBlock = {
@@ -155,8 +173,9 @@ function buildReportTable(templateBlock, dataStore) {
             }
           }
 
-          const handleSubColumns = (subcols, row, block) => {
+          const handleSubColumns = (subcols, row, block, relTypes, nodeTypes) => {
             // if it has children
+            console.log(row)
             if (row.node && row.node.children && row.node.children.length > 0) {
               row.children = row.node.children;
             }
@@ -164,24 +183,28 @@ function buildReportTable(templateBlock, dataStore) {
               const subRowBlockArr = [];
 
               row.children.forEach((childRow) => {
-                const subRowBlock = {
-                  type: 'tr',
-                  attributes: { class: 'tr', id: childRow.node.identity },
-                  content: [],
-                };
-                subcols.forEach((subCol) => {
-                  if (subCol.columns) {
-                    handleSubColumns(subCol.columns, childRow, subRowBlock);
-                  } else {
-                    subRowBlock.content.push({
-                      type: 'td',
-                      attributes: { class: 'td', field: subCol.label, style: `min-width:${subCol.width}px;width:${subCol.width}px;` },
-                      content: '' + getTableMappedResult(childRow, subCol.graphType, subCol.fields, true) + ' ',
-                    });
-                  }
-                });
 
-                subRowBlockArr.push(subRowBlock)
+                // only display rows for the correct relationship
+                if (relTypes.indexOf(childRow.edge.label) > -1) {
+                  const subRowBlock = {
+                    type: 'tr',
+                    attributes: { class: 'tr', id: childRow.node.identity },
+                    content: [],
+                  };
+                  subcols.forEach((subCol) => {
+                    if (subCol.columns) {
+                      handleSubColumns(subCol.columns, childRow, subRowBlock);
+                    } else {
+                      subRowBlock.content.push({
+                        type: 'td',
+                        attributes: { class: 'td', field: subCol.label, style: `min-width:${subCol.width}px;width:${subCol.width}px;` },
+                        content: '' + getTableMappedResult(childRow, subCol.graphType, subCol.fields, true) + ' ',
+                      });
+                    }
+                  });
+                  subRowBlockArr.push(subRowBlock)
+                }
+
               })
 
               const colspanCount = colspanCounter(subcols);
@@ -193,14 +216,11 @@ function buildReportTable(templateBlock, dataStore) {
                 }],
               };
               block.content.push(childrenTdDiv);
-            } else {
-
-
             }
           }
 
           if (col.columns) {
-            handleSubColumns(col.columns, tableRow, rowBlock);
+            handleSubColumns(col.columns, tableRow, rowBlock, col.relationships, col.nodes);
           }
         });
       }
