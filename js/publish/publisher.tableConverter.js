@@ -17,10 +17,14 @@ function convertStoreToTableRows(dataStoreElement, templateBlock) {
     delete rootElements[edge.target];
   });
 
+  let sequence = 0;
   // for each root element add a new table row and browser relationships
   for (const [key, value] of Object.entries(rootElements)) {
 
+    sequence = sequence+1;
+
     // Add Row
+    value.indentSequence = sequence;
     tableRows.push(value);
 
     // Browse relationships
@@ -55,7 +59,7 @@ function rowRecursiveHandler(rootElement, nodes, edges, level, templateBlock, ta
   relatedEdges
     // look for inline relationships
     .filter((edge) => templateBlock.inlineRelationships.indexOf(edge.label) > -1)
-    .forEach((edge) => {
+    .forEach((edge,index) => {
       const subElement = nodes[edge.target];
       rowRecursiveHandler(subElement, nodes, edges, level, templateBlock, tableRows);
       rootElement.children.push({
@@ -69,8 +73,9 @@ function rowRecursiveHandler(rootElement, nodes, edges, level, templateBlock, ta
   relatedEdges
     // look for non-inline relationships
     .filter((edge) => templateBlock.inlineRelationships.indexOf(edge.label) < 0)
-    .forEach((edge) => {
-      const subElement = nodes[edge.target];
+    .forEach((edge,index) => {
+      const subElement = JSON.parse(JSON.stringify(nodes[edge.target]));
+      subElement.indentSequence = index+1;
       tableRows.push(subElement);
       rowRecursiveHandler(subElement, nodes, edges, level, templateBlock, tableRows);
     });
@@ -126,7 +131,7 @@ function buildReportTable(templateBlock, dataStore) {
   });
 
   if (tableRows) {
-    tableRows.forEach((tableRow) => {
+    tableRows.forEach((tableRow,index) => {
       const rowBlock = {
         type: 'tr',
         attributes: { class: 'tr', id: tableRow.identity },
@@ -143,7 +148,7 @@ function buildReportTable(templateBlock, dataStore) {
               for (let i = 1; i < global.indentationColumns + 1; i++) {
                 let cross = ' ';
                 if (i == getTableMappedResult(tableRow, col.graphType, col.fields)) {
-                  cross = '' + getTableMappedResult(tableRow, col.graphType, col.fields) + '';
+                  cross = '' + tableRow.indentSequence+ '';
                 }
                 indentCases.push({
                   type: 'td',
@@ -175,7 +180,6 @@ function buildReportTable(templateBlock, dataStore) {
 
           const handleSubColumns = (subcols, row, block, relTypes, nodeTypes) => {
             // if it has children
-            console.log(row)
             if (row.node && row.node.children && row.node.children.length > 0) {
               row.children = row.node.children;
             }
