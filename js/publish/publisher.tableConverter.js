@@ -121,14 +121,14 @@ function buildReportTable(templateBlock, dataStore) {
   // Add Data
   const tableRows = convertStoreToTableRows(dataStore[templateBlock.mapping], templateBlock);
 
-  fs.writeFile("output.json", JSON.stringify(tableRows), 'utf8', function (err) {
-    if (err) {
-      console.log("An error occured while writing JSON Object to File.");
-      return console.log(err);
-    }
+  // fs.writeFile("output.json", JSON.stringify(tableRows), 'utf8', function (err) {
+  //   if (err) {
+  //     console.log("An error occured while writing JSON Object to File.");
+  //     return console.log(err);
+  //   }
 
-    console.log("JSON file has been saved.");
-  });
+  //   console.log("JSON file has been saved.");
+  // });
 
   if (tableRows) {
     tableRows.forEach((tableRow,index) => {

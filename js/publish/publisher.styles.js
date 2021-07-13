@@ -7,7 +7,6 @@ module.exports.htmlStyle = `
 }
 
 table {
-  height: 100%;
   border-collapse: collapse;
 }
 .td.level{

@@ -69,8 +69,9 @@ async function produce(dataStore, template) {
   const html = new htmlCreator(htmlCreatorContent);
 
   // convert to html
-  await html.renderHTMLToFile(path.join(process.cwd(), 'index.html'));
-  return html.renderHTML();
+  // await html.renderHTMLToFile(path.join(process.cwd(), 'index.html'));
+  const result = await html.renderHTML();
+  return result;
 };
 
 

@@ -53,8 +53,10 @@ async function buildReport(options) {
 
   // fill template
   console.time('ganister-cypher-reporter : produce')
-  await publisher.produce(dataStore, template);
+  const content = await publisher.produce(dataStore, template);
   console.timeEnd('ganister-cypher-reporter : produce')
+
+  return content;
 }
 
 
