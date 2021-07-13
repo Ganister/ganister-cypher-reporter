@@ -18,7 +18,6 @@ async function runQueries(queries, cypherDriver) {
       dataStore[res.id] = res.data;
     });
   }
-  await cypherDriver.close();
   return dataStore;
 }
 
