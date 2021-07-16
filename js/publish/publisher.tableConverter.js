@@ -189,7 +189,7 @@ function buildReportTable(templateBlock, dataStore) {
               row.children.forEach((childRow) => {
 
                 // only display rows for the correct relationship
-                if (relTypes.indexOf(childRow.edge.label) > -1) {
+                if (relTypes && relTypes.indexOf(childRow.edge.label) > -1) {
                   const subRowBlock = {
                     type: 'tr',
                     attributes: { class: 'tr', id: childRow.node.identity },
