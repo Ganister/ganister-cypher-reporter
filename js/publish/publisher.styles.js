@@ -8,8 +8,12 @@ module.exports.htmlStyle = `
 
 table {
   border-collapse: collapse;
+}
+
+table:not(.table){
   height: -webkit-fill-available;
 }
+
 .td.level{
   padding: 0 0;
   background-color: #eef;
