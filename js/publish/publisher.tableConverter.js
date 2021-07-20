@@ -92,12 +92,35 @@ function rowRecursiveHandler(rootElement, nodes, edges, level, templateBlock, ta
 function buildReportTable(templateBlock, dataStore) {
   const tableBlockContent = [];
   // Add Headers
+  let headerGroupBlock = {
+    type: 'tr',
+    attributes: { class: 'tr' },
+    content: [],
+  };
   const headerBlock = {
     type: 'tr',
     attributes: { class: 'tr' },
     content: [],
   };
   if (templateBlock.columns) {
+    
+    const buildColumnsGroups = (columns) => {
+      columns.forEach((col) => {
+        if (col.fields) {
+          headerGroupBlock.content.push({
+            type: 'td',
+            attributes: { class: 'th' },
+            content: col.category,
+          });
+        }
+        if (col.columns) {
+          buildColumnsGroups(col.columns)
+        }
+      });
+    }
+
+
+    buildColumnsGroups(templateBlock.columns);
     const buildColumns = (columns) => {
       columns.forEach((col) => {
         if (col.fields) {
@@ -115,20 +138,28 @@ function buildReportTable(templateBlock, dataStore) {
     buildColumns(templateBlock.columns);
 
   }
+  let latestCategory = '';
+  const headerGroupBlockReduced = {
+    type: 'tr',
+    attributes: { class: 'tr headerGroups' },
+    content: [],
+  };
+  headerGroupBlock.content.forEach((col)=>{
+    if (latestCategory !== col.content){
+      col.attributes.colspan = 1;
+      headerGroupBlockReduced.content.push(col)
+    }else {
+      headerGroupBlockReduced.content[headerGroupBlockReduced.content.length-1].attributes.colspan++;
+    }
+    latestCategory = col.content
+  })
+  tableBlockContent.push(headerGroupBlockReduced);
   tableBlockContent.push(headerBlock);
-
 
   // Add Data
   const tableRows = convertStoreToTableRows(dataStore[templateBlock.mapping], templateBlock);
 
-  // fs.writeFile("output.json", JSON.stringify(tableRows), 'utf8', function (err) {
-  //   if (err) {
-  //     console.log("An error occured while writing JSON Object to File.");
-  //     return console.log(err);
-  //   }
 
-  //   console.log("JSON file has been saved.");
-  // });
 
   if (tableRows) {
     tableRows.forEach((tableRow,index) => {

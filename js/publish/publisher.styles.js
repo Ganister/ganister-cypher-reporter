@@ -37,6 +37,13 @@ td > table > tbody > tr:last-child {
   border: none;
 }
 
+tr.headerGroups > td.th {
+  background-color: darkcyan;
+  border-right: solid 1px white;
+  color: white;
+  text-align: left;
+  padding-left: 10px;
+}
 
 
 .indentLine {
