@@ -63,6 +63,7 @@ tr.headerGroups > td.th {
 
 tr.tr.headerGroups > .th {
   top: 0px;
+  left: 0px;
 }
 
 .indentation {

@@ -30,9 +30,13 @@ async function produce(dataStore, template) {
     ]
   };
 
+  reportLabel = {
+    'fr-FR': 'Rapport',
+    'en-EN': 'Report'
+  }
 
   // initialize body
-  const reportHeader = buildReportHeader(template.author);
+  const reportHeader = buildReportHeader(template.author, reportLabel[global.locale],template.name );
   const body = {
     type: 'body',
     attributes: {
