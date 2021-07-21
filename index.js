@@ -22,6 +22,7 @@ const optionsSchema = Joi.object({
         indentation: Joi.boolean(),
         fields: Joi.object(),
         label: Joi.string(),
+        category: Joi.string(),
         width: Joi.number(),
         relationships: Joi.array(),
         nodes: Joi.array(),
