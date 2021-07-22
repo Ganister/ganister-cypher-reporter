@@ -31,6 +31,12 @@ function formatValue(value, type) {
   let formattedValue = value;
   if (value && value != "") {
     switch (type) {
+      case 'float':
+        formattedValue = parseFloat(value);
+        break;
+      case 'integer':
+        formattedValue = parseInt(value);
+        break;
       case 'string':
         formattedValue = value;
         break;
