@@ -48,6 +48,15 @@ const template = {
         {
           graphType: 'node',
           fields: {
+            part: { map: 'relProps.quantity', datatype: 'string' },
+          },
+          label: 'Qty',
+          category: 'Part',
+          width: 130,
+        },
+        {
+          graphType: 'node',
+          fields: {
             part: { map: 'properties._ref', datatype: 'string' },
             user: { map: 'properties.lastName', datatype: 'string' }
           },
@@ -178,6 +187,6 @@ const fs = require('fs')
 test('Produce an HTML report', async () => {
   const report = await publisher.produce(dataStore, template);
   console.log("LOG / file: publisher.test.js / line 170 / test / report", report);
-    fs.writeFile("pubTest.html", report, 'utf8', function (err) {
-   });
+  fs.writeFile("pubTest.html", report, 'utf8', function (err) {
+  });
 });

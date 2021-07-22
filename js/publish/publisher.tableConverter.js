@@ -13,12 +13,13 @@ function convertStoreToTableRows(dataStoreElement, templateBlock) {
 
   // retrieve root elements 
   const rootElements = { ...nodes };
+  // remove any element that has a incoming rel
   edges.forEach((edge) => {
     delete rootElements[edge.target];
   });
 
   let sequence = 0;
-  // for each root element add a new table row and browser relationships
+  // for each root element add a new table row and browse relationships
   for (const [key, value] of Object.entries(rootElements)) {
 
     sequence = sequence+1;
@@ -61,6 +62,7 @@ function rowRecursiveHandler(rootElement, nodes, edges, level, templateBlock, ta
     .filter((edge) => templateBlock.inlineRelationships.indexOf(edge.label) > -1)
     .forEach((edge,index) => {
       const subElement = nodes[edge.target];
+      subElement.relProps = edge.content.properties;
       rowRecursiveHandler(subElement, nodes, edges, level, templateBlock, tableRows);
       rootElement.children.push({
         edge,
@@ -75,6 +77,7 @@ function rowRecursiveHandler(rootElement, nodes, edges, level, templateBlock, ta
     .filter((edge) => templateBlock.inlineRelationships.indexOf(edge.label) < 0)
     .forEach((edge,index) => {
       const subElement = JSON.parse(JSON.stringify(nodes[edge.target]));
+      subElement.relProps = edge.content.properties;
       subElement.indentSequence = index+1;
       tableRows.push(subElement);
       rowRecursiveHandler(subElement, nodes, edges, level, templateBlock, tableRows);
