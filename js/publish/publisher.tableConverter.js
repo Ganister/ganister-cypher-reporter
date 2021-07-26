@@ -50,6 +50,8 @@ function rowRecursiveHandler(rootElement, nodes, edges, level, templateBlock, ta
   level++;
   rootElement.children = [];
   rootElement._level = level;
+
+  // removing data we (almost) never use in reports
   delete rootElement.properties._promotions;
   delete rootElement.properties._history;
 
@@ -75,12 +77,17 @@ function rowRecursiveHandler(rootElement, nodes, edges, level, templateBlock, ta
   relatedEdges
     // look for non-inline relationships
     .filter((edge) => templateBlock.inlineRelationships.indexOf(edge.label) < 0)
-    .forEach((edge,index) => {
-      const subElement = JSON.parse(JSON.stringify(nodes[edge.target]));
-      subElement.relProps = edge.content.properties;
-      subElement.indentSequence = index+1;
-      tableRows.push(subElement);
-      rowRecursiveHandler(subElement, nodes, edges, level, templateBlock, tableRows);
+    .forEach((edge, index) => {
+      try {
+        const subElement = JSON.parse(JSON.stringify(nodes[edge.target]));
+        subElement.relProps = edge.content.properties;
+        subElement.indentSequence = index + 1;
+        tableRows.push(subElement);
+        rowRecursiveHandler(subElement, nodes, edges, level, templateBlock, tableRows);
+      } catch (error) {
+        console.log("CAUSE: Might be missing a return statement for a nodetype")
+        console.log("LOG / file: publisher.tableConverter.js / line 87 :", error);
+      }
     });
 }
 
@@ -172,8 +179,6 @@ function buildReportTable(templateBlock, dataStore) {
   // Add Data
   const tableRows = convertStoreToTableRows(dataStore[templateBlock.mapping], templateBlock);
 
-
-
   if (tableRows) {
     tableRows.forEach((tableRow, index) => {
       const rowBlock = {
@@ -184,9 +189,7 @@ function buildReportTable(templateBlock, dataStore) {
       if (templateBlock.columns) {
         templateBlock.columns.forEach((col) => {
           if (col.fields) {
-
             if (col.indentation) {
-
               // Handle indentation column
               const indentCases = [];
               for (let i = 1; i < global.indentationColumns + 1; i++) {
@@ -205,7 +208,7 @@ function buildReportTable(templateBlock, dataStore) {
                 attributes: { class: 'td indentation', field: col.label, style: `min-width:${col.width}px;width:${col.width}px;` },
                 content: [
                   {
-                    type: 'table', content: [
+                    type: 'table', attributes: { class: 'indentTable' },content: [
                       { type: 'tr', attributes: { class: 'indentLine' }, content: indentCases }
                     ]
                   }
@@ -241,7 +244,7 @@ function buildReportTable(templateBlock, dataStore) {
                   };
                   subcols.forEach((subCol) => {
                     if (subCol.columns) {
-                      handleSubColumns(subCol.columns, childRow, subRowBlock);
+                      handleSubColumns(subCol.columns, childRow, subRowBlock,subCol.relationships,subCol.nodes);
                     } else {
                       subRowBlock.content.push({
                         type: 'td',

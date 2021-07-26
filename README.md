@@ -68,7 +68,10 @@ const queries = [
 Report Template Schema : 
 ```javascript
 const optionsSchema = Joi.object({
-  queries: Joi.array().required(),
+  queries: Joi.array().required().items(Joi.object({
+    id: Joi.string().required(),
+    query: Joi.string().required(),
+  })),
   template: Joi.object({
     name: Joi.string().required(),
     locale: Joi.string().required(),
@@ -117,6 +120,43 @@ const cypherDriver = neo4j.driver('bolt://<neo4jBoltAddress>', neo4j.auth.basic(
 ), { disableLosslessIntegers: true, encrypted: true });
 ```
 
+## How it works
+
+### Running Cypher
+
+An array of cypher queries is provided as an input.
+Each cypher query object has the following schema:
+``` javascript
+  Joi.object({
+    id: Joi.string().required(),
+    query: Joi.string().required(),
+  })
+```
+The queries are run by the file cypherQueries.js. They are run asynchronously. Their result is stored in a dataStore variable when all the promise resolve.
+
+The result is obtained from the function **parseQueryResult** which converts the neo4j default formatting into nodes and relationships. Some cypher may return values instead of nodes/edges. In this case we also return these as key-value pair.
+
+The returned object has the following format:
+``` javascript
+return {nodes,edges,values};
+```
+
+### Converting to table
+
+Once the datastore is built, the publisher scripts convert the datastore into an html table. **publisher.tableConverter.js** is the script converting the data into lines and columns, while **publisher.js** is building the table wrapper.
+
+#### Process
+
+1. we retrieve the nodes parent-most nodes. Nodes that don't have parents are selected first.
+2. we then iterate the resulting array.
+3. for each item, we manage their inline relationships first and then fetch their non-inline relationships to build a data-tree corresponding to the structure template by running this process recursively.
+4. The data-tree is converted into the table 
+   1. We first manage the indentation/level columns
+   2.
+
+
+
+
 ## Code of Conduct
 
 ## License
@@ -126,6 +166,3 @@ Evolution of features are listed on the [project kanban board](https://github.co
 
 ## Semver
 Until ganister-cypher-reporter reaches a 1.0.0 release, breaking changes will be released with a new minor version.
-
-## todo
-- [] retrieve relationship value

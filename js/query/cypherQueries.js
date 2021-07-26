@@ -30,7 +30,7 @@ async function runQueries(queries, cypherDriver) {
  * @param {*} cypherDriver 
  */
 async function runQuery(query, cypherDriver) {
-
+  console.time(query.id)
   // prepare dataSet
   let content = {
     id: query.id,
@@ -43,6 +43,8 @@ async function runQuery(query, cypherDriver) {
     const result = await session.run(query.query);
     // content.data = parseQueryResult(result);
     content.data = parseQueryResult(result);
+
+    console.timeEnd(query.id)
     await session.close();
     return content;
   } catch (error) {

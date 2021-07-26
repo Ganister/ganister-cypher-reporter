@@ -1,5 +1,4 @@
 const htmlCreator = require('html-creator');
-const path = require('path');
 const { htmlStyle } = require('./publisher.styles')
 const { resolveMapping, getMappedResult } = require('./publisher.utils')
 const { buildReportTable } = require('./publisher.tableConverter')

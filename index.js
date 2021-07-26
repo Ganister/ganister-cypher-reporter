@@ -5,7 +5,10 @@ const publisher = require('./js/publish/publisher');
 
 
 const optionsSchema = Joi.object({
-  queries: Joi.array().required(),
+  queries: Joi.array().required().items(Joi.object({
+    id: Joi.string().required(),
+    query: Joi.string().required(),
+  })),
   template: Joi.object({
     name: Joi.string().required(),
     locale: Joi.string().required(),

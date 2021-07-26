@@ -8,10 +8,16 @@ module.exports.htmlStyle = `
 
 table {
   border-collapse: collapse;
+  width: 100%;
 }
 
 table:not(.table){
   height: -webkit-fill-available;
+  width: unset;
+}
+table.indentTable{
+  height: -webkit-fill-available;
+  width: 100%;
 }
 
 .td.level{
