@@ -27,6 +27,7 @@ const optionsSchema = Joi.object({
         relationships: Joi.array(),
         nodes: Joi.array(),
         columns: Joi.array().items(Joi.link('#column')),
+        css: Joi.object(),
       }).id('column')),
       width: Joi.string().allow('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'),
       title: Joi.string(),

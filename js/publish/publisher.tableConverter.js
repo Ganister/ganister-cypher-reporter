@@ -22,7 +22,7 @@ function convertStoreToTableRows(dataStoreElement, templateBlock) {
   // for each root element add a new table row and browse relationships
   for (const [key, value] of Object.entries(rootElements)) {
 
-    sequence = sequence+1;
+    sequence = sequence + 1;
 
     // Add Row
     value.indentSequence = sequence;
@@ -60,7 +60,7 @@ function rowRecursiveHandler(rootElement, nodes, edges, level, templateBlock, ta
   relatedEdges
     // look for inline relationships
     .filter((edge) => templateBlock.inlineRelationships.indexOf(edge.label) > -1)
-    .forEach((edge,index) => {
+    .forEach((edge, index) => {
       const subElement = nodes[edge.target];
       subElement.relProps = edge.content.properties;
       rowRecursiveHandler(subElement, nodes, edges, level, templateBlock, tableRows);
@@ -106,7 +106,7 @@ function buildReportTable(templateBlock, dataStore) {
     content: [],
   };
   if (templateBlock.columns) {
-    
+
     const buildColumnsGroups = (columns) => {
       columns.forEach((col) => {
         if (col.fields) {
@@ -127,11 +127,21 @@ function buildReportTable(templateBlock, dataStore) {
     const buildColumns = (columns) => {
       columns.forEach((col) => {
         if (col.fields) {
-          headerBlock.content.push({
+          let css = `width:${col.width}px;min-width:${col.width}px;`
+          if (col.css){
+            for (const [key,value] of Object.entries(col.css)){
+              css += `${key}:${value};`
+            }
+          }
+          const tableColHeader = {
             type: 'td',
-            attributes: { class: 'th', style: `width:${col.width}px;min-width:${col.width}px;` },
+            attributes: {
+              class: 'th',
+              style: css,
+            },
             content: col.label,
-          });
+          };
+          headerBlock.content.push(tableColHeader);
         }
         if (col.columns) {
           buildColumns(col.columns)
@@ -147,12 +157,12 @@ function buildReportTable(templateBlock, dataStore) {
     attributes: { class: 'tr headerGroups' },
     content: [],
   };
-  headerGroupBlock.content.forEach((col)=>{
-    if (latestCategory !== col.content){
+  headerGroupBlock.content.forEach((col) => {
+    if (latestCategory !== col.content) {
       col.attributes.colspan = 1;
       headerGroupBlockReduced.content.push(col)
-    }else {
-      headerGroupBlockReduced.content[headerGroupBlockReduced.content.length-1].attributes.colspan++;
+    } else {
+      headerGroupBlockReduced.content[headerGroupBlockReduced.content.length - 1].attributes.colspan++;
     }
     latestCategory = col.content
   })
@@ -165,7 +175,7 @@ function buildReportTable(templateBlock, dataStore) {
 
 
   if (tableRows) {
-    tableRows.forEach((tableRow,index) => {
+    tableRows.forEach((tableRow, index) => {
       const rowBlock = {
         type: 'tr',
         attributes: { class: 'tr', id: tableRow.identity },
@@ -182,7 +192,7 @@ function buildReportTable(templateBlock, dataStore) {
               for (let i = 1; i < global.indentationColumns + 1; i++) {
                 let cross = ' ';
                 if (i == getTableMappedResult(tableRow, col.graphType, col.fields)) {
-                  cross = '' + tableRow.indentSequence+ '';
+                  cross = '' + tableRow.indentSequence + '';
                 }
                 indentCases.push({
                   type: 'td',
