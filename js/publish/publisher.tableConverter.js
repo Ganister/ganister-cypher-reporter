@@ -276,6 +276,31 @@ function buildReportTable(templateBlock, dataStore) {
               })
 
 
+            } else {
+              // fill empty cells
+              const subRowBlock = {
+                type: 'tr',
+                attributes: { class: 'tr' },
+                content: [],
+              };
+              subcols.forEach((subCol) => {
+                if (subCol.columns) {
+                  handleSubColumns(subCol.columns, {}, subRowBlock, subCol.relationships, subCol.nodes);
+                } else {
+                  const tdStyle = `width:${subCol.width}px;
+                  min-width:${subCol.width}px;
+                  max-width: ${subCol.width}px;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                  white-space: nowrap;`
+                  subRowBlock.content.push({
+                    type: 'td',
+                    attributes: { class: 'td', field: subCol.label, style: tdStyle },
+                    content: ' ',
+                  });
+                }
+              });
+              subRowBlockArr.push(subRowBlock)
             }
             const colspanCount = colspanCounter(subcols);
             const childrenTdDiv = {
