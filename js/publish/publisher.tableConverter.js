@@ -32,7 +32,8 @@ function convertStoreToTableRows(dataStoreElement, templateBlock) {
     rowRecursiveHandler(value, nodes, edges, 0, templateBlock, tableRows);
 
   }
-
+  fs.writeFile("log/devbench_tableRows.js", JSON.stringify(tableRows), 'utf8', function (err) {
+  });
   return tableRows;
 }
 
