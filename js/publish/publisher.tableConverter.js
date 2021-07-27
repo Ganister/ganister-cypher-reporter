@@ -230,8 +230,8 @@ function buildReportTable(templateBlock, dataStore) {
             if (row.node && row.node.children && row.node.children.length > 0) {
               row.children = row.node.children;
             }
+            const subRowBlockArr = [];
             if (row.children && row.children.length > 0) {
-              const subRowBlockArr = [];
 
               row.children.forEach((childRow) => {
 
@@ -258,16 +258,17 @@ function buildReportTable(templateBlock, dataStore) {
 
               })
 
-              const colspanCount = colspanCounter(subcols);
-              const childrenTdDiv = {
-                type: 'td',
-                attributes: { class: 'tdr', colspan: `${colspanCount}` },
-                content: [{
-                  type: 'table', content: subRowBlockArr
-                }],
-              };
-              block.content.push(childrenTdDiv);
+ 
             }
+            const colspanCount = colspanCounter(subcols);
+            const childrenTdDiv = {
+              type: 'td',
+              attributes: { class: 'tdr', colspan: `${colspanCount}` },
+              content: [{
+                type: 'table', content: subRowBlockArr
+              }],
+            };
+            block.content.push(childrenTdDiv);
           }
 
           if (col.columns) {
