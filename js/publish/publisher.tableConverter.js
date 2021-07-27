@@ -134,9 +134,14 @@ function buildReportTable(templateBlock, dataStore) {
     const buildColumns = (columns) => {
       columns.forEach((col) => {
         if (col.fields) {
-          let css = `width:${col.width}px;min-width:${col.width}px;`
-          if (col.css){
-            for (const [key,value] of Object.entries(col.css)){
+          let css = `width:${col.width}px;
+          min-width:${col.width}px;
+          max-width: ${col.width}px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;`
+          if (col.css) {
+            for (const [key, value] of Object.entries(col.css)) {
               css += `${key}:${value};`
             }
           }
@@ -208,7 +213,7 @@ function buildReportTable(templateBlock, dataStore) {
                 attributes: { class: 'td indentation', field: col.label, style: `min-width:${col.width}px;width:${col.width}px;` },
                 content: [
                   {
-                    type: 'table', attributes: { class: 'indentTable' },content: [
+                    type: 'table', attributes: { class: 'indentTable' }, content: [
                       { type: 'tr', attributes: { class: 'indentLine' }, content: indentCases }
                     ]
                   }
@@ -217,9 +222,15 @@ function buildReportTable(templateBlock, dataStore) {
             } else {
 
               // Handle normal column
+              const tdStyle = `width:${col.width}px;
+                min-width:${col.width}px;
+                max-width: ${col.width}px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;`
               rowBlock.content.push({
                 type: 'td',
-                attributes: { class: 'td', field: col.label, style: `min-width:${col.width}px;width:${col.width}px;` },
+                attributes: { class: 'td', field: col.label, style: tdStyle },
                 content: '' + getTableMappedResult(tableRow, col.graphType, col.fields) + ' ',
               });
             }
@@ -236,7 +247,7 @@ function buildReportTable(templateBlock, dataStore) {
               row.children.forEach((childRow) => {
 
                 // only display rows for the correct relationship
-                if (relTypes && relTypes.indexOf(childRow.edge.label) > -1) {
+                if ((relTypes && relTypes.indexOf(childRow.edge.label) > -1) && (nodeTypes && nodeTypes.indexOf(childRow.node.labels[0]) > -1)) {
                   const subRowBlock = {
                     type: 'tr',
                     attributes: { class: 'tr', id: childRow.node.identity },
@@ -244,11 +255,17 @@ function buildReportTable(templateBlock, dataStore) {
                   };
                   subcols.forEach((subCol) => {
                     if (subCol.columns) {
-                      handleSubColumns(subCol.columns, childRow, subRowBlock,subCol.relationships,subCol.nodes);
+                      handleSubColumns(subCol.columns, childRow, subRowBlock, subCol.relationships, subCol.nodes);
                     } else {
+                      const tdStyle = `width:${subCol.width}px;
+                      min-width:${subCol.width}px;
+                      max-width: ${subCol.width}px;
+                      overflow: hidden;
+                      text-overflow: ellipsis;
+                      white-space: nowrap;`
                       subRowBlock.content.push({
                         type: 'td',
-                        attributes: { class: 'td', field: subCol.label, style: `min-width:${subCol.width}px;width:${subCol.width}px;` },
+                        attributes: { class: 'td', field: subCol.label, style: tdStyle },
                         content: '' + getTableMappedResult(childRow, subCol.graphType, subCol.fields, true) + ' ',
                       });
                     }
@@ -258,7 +275,7 @@ function buildReportTable(templateBlock, dataStore) {
 
               })
 
- 
+
             }
             const colspanCount = colspanCounter(subcols);
             const childrenTdDiv = {
