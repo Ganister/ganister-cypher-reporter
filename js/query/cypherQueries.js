@@ -40,19 +40,91 @@ async function runQuery(query, cypherDriver) {
   // run query
   const session = cypherDriver.session();
   try {
+
+    // run query
     const result = await session.run(query.query);
-    // content.data = parseQueryResult(result);
-    content.data = parseQueryResult(result);
+
+    // parse result
+    content.data = parseQueryResult(query.structure, result);
 
     console.timeEnd(query.id)
     await session.close();
     return content;
   } catch (error) {
+    console.error("LOG / file: cypherQueries.js / line 71 / runQuery / error", error);
     await session.close();
     return content;
   }
 }
 
+function parseStructureElement(structureItem, store, n, level = 0) {
+
+  structureItem.forEach((nodetype) => {
+    const obj = n.get(nodetype.identifier);
+   if (obj) {
+      switch (obj.constructor.name) {
+        case 'Relationship':
+          // prevent duplicates
+
+          const relRetrieve = store.find((itm) => itm.identity === obj.identity)
+          let subObj;
+          if (relRetrieve) {
+            subObj = relRetrieve;
+          } else {
+            subObj = {
+              _type: 'relationship',
+              identity: obj.identity,
+              label: obj.type,
+              source: obj.start,
+              target: obj.end,
+              _edge: obj,
+              _node: {}
+            }
+            store.push(subObj);
+          }
+
+          level++;
+          parseStructureElement(nodetype.children, subObj, n, level)
+          break;
+        case 'Node':
+          if (level == 0) {
+            obj._children = [];
+            obj._type = 'node';
+            const objRetrieve = store.find((itm) => itm.properties._id === obj.properties._id)
+            if (!objRetrieve) {
+              store.push(obj)
+              level++;
+              if (nodetype.children.length > 0) {
+                parseStructureElement(nodetype.children, obj._children, n, level)
+              }
+            } else {
+              level++;
+              if (nodetype.children.length > 0) {
+                parseStructureElement(nodetype.children, objRetrieve._children, n, level)
+              }
+            }
+          } else {
+            if (store._node && store._node.identity == obj.identity) {
+            } else {
+              store._node = obj;
+              level++;
+              if (!obj._children) obj._children = [];
+            }
+            if (nodetype.children.length > 0) {
+              parseStructureElement(nodetype.children, store._node._children, n, level)
+            }
+          }
+
+          break;
+        case 'Number':
+        case 'String':
+          values[key] = obj;
+        default:
+          break;
+      }
+    }
+  })
+}
 
 
 /**
@@ -60,84 +132,27 @@ async function runQuery(query, cypherDriver) {
  * @param {*} result 
  * @returns 
  */
-function parseQueryResult(result) {
+function parseQueryResult(structure, result) {
   try {
-    const nodes = {};
-    let edges = [];
+    const nodes = [];
     const values = {};
+
+    // Loop through records
     if (result.records.length > 0) {
       result.records.map((n, index) => {
-        let currentLastRowItem = {};
-        if (n.keys) {
-          n.keys.forEach((key, index) => {
-            const obj = n.get(key);
-            if (obj) {
-              switch (obj.constructor.name) {
-                case 'Path':
-                  obj.segments.forEach((seg) => {
-                    if (!nodes[seg.start.identity]) nodes[seg.start.identity] = seg.start;
-                    if (!nodes[seg.end.identity]) nodes[seg.end.identity] = seg.end;
-                    if (!edges.some(edge => edge.content.identity === seg.relationship.identity)) {
-                      edges.push({
-                        type: 'inPath',
-                        source: seg.start.identity,
-                        label: seg.relationship.type,
-                        target: seg.end.identity,
-                        content: seg.relationship,
-                      })
-                    }
-                  });
-                  if (index > 0) {
-                    edges.push({
-                      type: 'toPath',
-                      source: currentLastRowItem.identity,
-                      label: obj.type,
-                      target: obj.start.identity,
-                      content: {},
-                    });
-                  }
-                  currentLastRowItem = obj.end;
-                  break;
-                case 'Relationship':
-                  if (index > 0) {
-                    // prevent duplicates
-                    if (!edges.find(edge => edge.content.identity === obj.identity)) {
-                      edges.push({
-                        type: 'Relationship',
-                        label: obj.type,
-                        source: obj.start,
-                        target: obj.end,
-                        content: obj,
-                      });
-                    }
-                  }
-                  break;
-                case 'Node':
-                  if (!nodes[obj.identity]) nodes[obj.identity] = obj;
-                  currentLastRowItem = obj;
-                  break;
-                case 'Number':
-                case 'String':
-                  values[key] = obj;
-                default:
-                  break;
-              }
-            }
-          });
-        }
-      });
+
+        parseStructureElement(structure, nodes, n)
+
+      })
     }
-
-
 
     const data = {
       nodes,
-      edges,
       values,
     };
     return data;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }
 

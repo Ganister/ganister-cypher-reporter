@@ -9,14 +9,8 @@ const fs = require('fs');
  */
 function convertStoreToTableRows(dataStoreElement, templateBlock) {
   const tableRows = [];
-  const { nodes = [], edges = [] } = dataStoreElement;
+  const { nodes = [] } = dataStoreElement;
 
-  // retrieve root elements 
-  const rootElements = { ...nodes };
-  // remove any element that has a incoming rel
-  edges.forEach((edge) => {
-    delete rootElements[edge.target];
-  });
 
   let sequence = 0;
   // for each root element add a new table row and browse relationships
@@ -183,7 +177,7 @@ function buildReportTable(templateBlock, dataStore) {
   tableBlockContent.push(headerBlock);
 
   // Add Data
-  const tableRows = convertStoreToTableRows(dataStore[templateBlock.mapping], templateBlock);
+  const tableRows = dataStore[templateBlock.mapping].nodes
 
   if (tableRows) {
     tableRows.forEach((tableRow, index) => {
@@ -221,14 +215,12 @@ function buildReportTable(templateBlock, dataStore) {
                 ],
               });
             } else {
+              // console.log("LOG / file: publisher.tableConverter.js / line 192 / templateBlock.columns.forEach / col", col);
 
               // Handle normal column
               const tdStyle = `width:${col.width}px;
                 min-width:${col.width}px;
-                max-width: ${col.width}px;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;`
+                max-width: ${col.width}px;`
               rowBlock.content.push({
                 type: 'td',
                 attributes: { class: 'td', field: col.label, style: tdStyle },
@@ -239,31 +231,25 @@ function buildReportTable(templateBlock, dataStore) {
 
           const handleSubColumns = (subcols, row, block, relTypes, nodeTypes) => {
             // if it has children
-            if (row.node && row.node.children && row.node.children.length > 0) {
-              row.children = row.node.children;
-            }
             const subRowBlockArr = [];
-            if (row.children && row.children.length > 0) {
+            if (row._children && row._children.length > 0) {
 
-              row.children.forEach((childRow) => {
+              row._children.forEach((childRow) => {
 
                 // only display rows for the correct relationship
-                if ((relTypes && relTypes.indexOf(childRow.edge.label) > -1) && (nodeTypes && nodeTypes.indexOf(childRow.node.labels[0]) > -1)) {
+                if ((relTypes && relTypes.indexOf(childRow.label) > -1) && (nodeTypes && nodeTypes.indexOf(childRow._node.labels[0]) > -1)) {
                   const subRowBlock = {
                     type: 'tr',
-                    attributes: { class: 'tr', id: childRow.node.identity },
+                    attributes: { class: 'tr', id: childRow._node.identity },
                     content: [],
                   };
                   subcols.forEach((subCol) => {
-                    if (subCol.columns) {
-                      handleSubColumns(subCol.columns, childRow, subRowBlock, subCol.relationships, subCol.nodes);
+                   if (subCol.columns) {
+                      handleSubColumns(subCol.columns, childRow._node, subRowBlock, subCol.relationships, subCol.nodes);
                     } else {
                       const tdStyle = `width:${subCol.width}px;
                       min-width:${subCol.width}px;
-                      max-width: ${subCol.width}px;
-                      overflow: hidden;
-                      text-overflow: ellipsis;
-                      white-space: nowrap;`
+                      max-width: ${subCol.width}px;`
                       subRowBlock.content.push({
                         type: 'td',
                         attributes: { class: 'td', field: subCol.label, style: tdStyle },
@@ -290,10 +276,7 @@ function buildReportTable(templateBlock, dataStore) {
                 } else {
                   const tdStyle = `width:${subCol.width}px;
                   min-width:${subCol.width}px;
-                  max-width: ${subCol.width}px;
-                  overflow: hidden;
-                  text-overflow: ellipsis;
-                  white-space: nowrap;`
+                  max-width: ${subCol.width}px;`
                   subRowBlock.content.push({
                     type: 'td',
                     attributes: { class: 'td', field: subCol.label, style: tdStyle },
@@ -352,18 +335,13 @@ function getTableMappedResult(dataStore, graphType, mapping, children = false) {
   let label;
   if (graphType === 'node') {
     if (children) {
-      label = dataStore.node.labels[0];
+      label = dataStore._node.labels[0];
     } else {
       label = dataStore.labels[0];
     }
   } else {
-    if (children) {
-      label = dataStore.edge.label;
-    } else {
-      label = dataStore.label;
-    }
+    label = dataStore.label;
   }
-
   if (mapping && (label in mapping)) {
     const mappingArray = mapping[label].map.split('.');
     const datatype = mapping[label].datatype;

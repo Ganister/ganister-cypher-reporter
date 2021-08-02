@@ -8,6 +8,13 @@ const optionsSchema = Joi.object({
   queries: Joi.array().required().items(Joi.object({
     id: Joi.string().required(),
     query: Joi.string().required(),
+    structure: Joi.array().items(Joi.object({
+      identifier: Joi.string(),
+      children: Joi.array().items(Joi.object({
+        identifier: Joi.string(),
+        children: Joi.array().items(Joi.link('#structureNodeType')),
+      })),
+    }).id('structureNodeType')),
   })),
   template: Joi.object({
     name: Joi.string().required(),
@@ -47,19 +54,19 @@ async function buildReport(options) {
   if (error) return error;
 
   // parse options
-  console.time('ganister-cypher-reporter : parse')
+  console.time('[ganister-cypher-reporter] parse')
   const { queries, template, output, cypherDriver } = options;
-  console.timeEnd('ganister-cypher-reporter : parse')
+  console.timeEnd('[ganister-cypher-reporter] parse')
 
   // run queries
-  console.time('ganister-cypher-reporter : query')
+  console.time('[ganister-cypher-reporter] query')
   const dataStore = await cyq.runQueries(queries, cypherDriver);
-  console.timeEnd('ganister-cypher-reporter : query')
+  console.timeEnd('[ganister-cypher-reporter] query')
 
   // fill template
-  console.time('ganister-cypher-reporter : produce')
+  console.time('[ganister-cypher-reporter] produce')
   const content = await publisher.produce(dataStore, template);
-  console.timeEnd('ganister-cypher-reporter : produce')
+  console.timeEnd('[ganister-cypher-reporter] produce')
 
   return content;
 }

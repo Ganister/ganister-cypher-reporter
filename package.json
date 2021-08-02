@@ -1,6 +1,6 @@
 {
   "name": "ganister-cypher-reporter",
-  "version": "0.0.37",
+  "version": "0.0.38",
   "description": "Report Engine for Graph DB supporting cypher queries",
   "main": "index.js",
   "scripts": {
