@@ -8,6 +8,7 @@ const optionsSchema = Joi.object({
   queries: Joi.array().required().items(Joi.object({
     id: Joi.string().required(),
     query: Joi.string().required(),
+    ordering: Joi.array(),
     structure: Joi.array().items(Joi.object({
       identifier: Joi.string(),
       children: Joi.array().items(Joi.object({
@@ -51,7 +52,10 @@ const optionsSchema = Joi.object({
 async function buildReport(options) {
 
   const { error, value } = optionsSchema.validate(options);
-  if (error) return error;
+  if (error){
+    console.log("LOG / file: index.js / line 55 / buildReport / error", error);
+    return error;
+  } 
 
   // parse options
   console.time('[ganister-cypher-reporter] parse')

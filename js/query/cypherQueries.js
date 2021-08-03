@@ -1,3 +1,7 @@
+
+
+const { resolveMapping, formatValue } = require('../publish/publisher.utils')
+
 /**
  * 
  * @param {*} queries 
@@ -45,7 +49,7 @@ async function runQuery(query, cypherDriver) {
     const result = await session.run(query.query);
 
     // parse result
-    content.data = parseQueryResult(query.structure, result);
+    content.data = parseQueryResult(query.structure, query.ordering, result);
 
     console.timeEnd(query.id)
     await session.close();
@@ -63,9 +67,6 @@ function parseStructureElement(structureItem, store, n, level = 0) {
     const obj = n.get(nodetype.identifier);
     if (obj) {
       switch (obj.constructor.name) {
-
-
-
         case 'Path':
           let latestItem = store;
           obj.segments.forEach((seg, index) => {
@@ -181,13 +182,69 @@ function parseStructureElement(structureItem, store, n, level = 0) {
   })
 }
 
+function sortStore(nodes, ordering, level = 0) {
+  if (ordering.length > 0) {
+    if (level == 0) {
+      nodes
+        // first sort by label
+        .sort((a, b) => {
+          return a.labels[0].localeCompare(b.labels[0]);
+        })
+      ordering.forEach((ord) => {
+        nodes.sort((a, b) => {
+          if (a.labels[0] == b.labels[0] == ord.type) {
+            const un = resolveMapping(a, ord.prop);
+            const deux = resolveMapping(b, ord.prop);
+            return un.localeCompare(deux);
+          }
+        })
+      })
+      level++;
+      nodes.forEach((node) => {
+        if (node && node._children) {
+          sortStore(node._children, ordering, level)
+        }
+      })
+    } else {
+      nodes
+        // first sort by label
+        .sort((a, b) => {
+          return a.label.localeCompare(b.label);
+        })
+      ordering.forEach((ord) => {
+        nodes.sort((a, b) => {
+          if (a.label == ord.type && b.label == ord.type) {
+            const un = resolveMapping(a, ord.prop.split('.'));
+            const deux = resolveMapping(b, ord.prop.split('.'));
+            switch (ord.compareType) {
+              case 'integer':
+                return parseInt(un) - parseInt(deux);
+              default:
+                return un.localeCompare(deux);
+            }
+          }
+        })
+      })
+      level++;
+      nodes.forEach((node) => {
+        if (node._node && node._node._children) {
+          sortStore(node._node._children, ordering, level)
+        }
+      })
+    }
+  }
+  return nodes;
+}
+
+
+
 
 /**
  * 
  * @param {*} result 
  * @returns 
  */
-function parseQueryResult(structure, result) {
+function parseQueryResult(structure, ordering, result) {
   try {
     const nodes = [];
     const values = {};
@@ -195,11 +252,12 @@ function parseQueryResult(structure, result) {
     // Loop through records
     if (result.records.length > 0) {
       result.records.map((n, index) => {
-
         parseStructureElement(structure, nodes, n)
-
       })
     }
+
+    // order elements
+    sortStore(nodes, ordering);
 
     const data = {
       nodes,
