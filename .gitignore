@@ -104,5 +104,6 @@ dist
 .tern-port
 
 out/
+internalTest/
 
 index.html
