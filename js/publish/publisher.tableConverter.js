@@ -11,6 +11,7 @@ function convertStoreToTableRows(dataStoreElement, templateBlock) {
   const tableRows = [];
   const { nodes = [] } = dataStoreElement;
 
+  const rootElements = { ...nodes };
 
   let sequence = 0;
   // for each root element add a new table row and browse relationships
@@ -20,13 +21,22 @@ function convertStoreToTableRows(dataStoreElement, templateBlock) {
 
     // Add Row
     value.indentSequence = sequence;
-    tableRows.push(value);
+    if (value._type == 'node') {
+      // handle first level
+      tableRows.push({
+        _edge: {},
+        _node: value,
+        indentSequence: value.indentSequence,
+        level: value.indentSequence,
+      });
+    } else {
+      tableRows.push(value);
+    }
 
     // Browse relationships
-    rowRecursiveHandler(value, nodes, edges, 0, templateBlock, tableRows);
+    rowRecursiveHandler(value, 0, templateBlock, tableRows);
 
   }
- 
   return tableRows;
 }
 
@@ -39,10 +49,9 @@ function convertStoreToTableRows(dataStoreElement, templateBlock) {
  * @param {*} templateBlock 
  * @param {*} tableRows 
  */
-function rowRecursiveHandler(rootElement, nodes, edges, level, templateBlock, tableRows) {
+function rowRecursiveHandler(rootElement, level, templateBlock, tableRows) {
 
   level++;
-  rootElement.children = [];
   rootElement._level = level;
 
   // removing data we (almost) never use in reports
@@ -50,39 +59,26 @@ function rowRecursiveHandler(rootElement, nodes, edges, level, templateBlock, ta
   delete rootElement.properties._history;
 
   // keep relationships of the actual node
-  const relatedEdges = edges.filter((edge) => edge.source === rootElement.identity);
-
-  // handle inline relationships
-  relatedEdges
-    // look for inline relationships
-    .filter((edge) => templateBlock.inlineRelationships.indexOf(edge.label) > -1)
-    .forEach((edge, index) => {
-      const subElement = nodes[edge.target];
-      subElement.relProps = edge.content.properties;
-      rowRecursiveHandler(subElement, nodes, edges, level, templateBlock, tableRows);
-      rootElement.children.push({
-        edge,
-        node: subElement
-      });
-
-    });
 
   // handle subline relationships
-  relatedEdges
-    // look for non-inline relationships
-    .filter((edge) => templateBlock.inlineRelationships.indexOf(edge.label) < 0)
-    .forEach((edge, index) => {
-      try {
-        const subElement = JSON.parse(JSON.stringify(nodes[edge.target]));
-        subElement.relProps = edge.content.properties;
-        subElement.indentSequence = index + 1;
-        tableRows.push(subElement);
-        rowRecursiveHandler(subElement, nodes, edges, level, templateBlock, tableRows);
-      } catch (error) {
-        console.log("CAUSE: Might be missing a return statement for a nodetype")
-        console.log("LOG / file: publisher.tableConverter.js / line 87 :", error);
-      }
-    });
+  if (rootElement._children) {
+    rootElement._children
+      // look for non-inline relationships
+      .filter((edge) => templateBlock.inlineRelationships.indexOf(edge.label) < 0)
+      .forEach((edge, index) => {
+        try {
+          const subElement = JSON.parse(JSON.stringify(edge));
+          subElement.indentSequence = index + 1;
+          tableRows.push(subElement);
+          rowRecursiveHandler(subElement._node, level, templateBlock, tableRows);
+        } catch (error) {
+          console.error("CAUSE: Might be missing a return statement for a nodetype")
+          console.error("LOG / file: publisher.tableConverter.js / line 87 :", error);
+        }
+      });
+
+    rootElement._children = rootElement._children.filter((edge) => templateBlock.inlineRelationships.indexOf(edge.label) > -1)
+  }
 }
 
 
@@ -176,10 +172,10 @@ function buildReportTable(templateBlock, dataStore) {
   tableBlockContent.push(headerBlock);
 
   // Add Data
-  const tableRows = dataStore[templateBlock.mapping].nodes
+  const tableRows = convertStoreToTableRows(dataStore[templateBlock.mapping], templateBlock)
 
   if (tableRows) {
-    tableRows.forEach((tableRow, index) => {
+    tableRows.forEach((tableRow) => {
       const rowBlock = {
         type: 'tr',
         attributes: { class: 'tr', id: tableRow.identity },
@@ -194,7 +190,7 @@ function buildReportTable(templateBlock, dataStore) {
               for (let i = 1; i < global.indentationColumns + 1; i++) {
                 let cross = ' ';
                 if (i == getTableMappedResult(tableRow, col.graphType, col.fields)) {
-                  cross = '' + tableRow.indentSequence + '';
+                  cross = '' + tableRow.indentSequence + ' ';
                 }
                 indentCases.push({
                   type: 'td',
@@ -214,8 +210,6 @@ function buildReportTable(templateBlock, dataStore) {
                 ],
               });
             } else {
-              // console.log("LOG / file: publisher.tableConverter.js / line 192 / templateBlock.columns.forEach / col", col);
-
               // Handle normal column
               const tdStyle = `width:${col.width}px;
                 min-width:${col.width}px;
@@ -231,9 +225,9 @@ function buildReportTable(templateBlock, dataStore) {
           const handleSubColumns = (subcols, row, block, relTypes, nodeTypes) => {
             // if it has children
             const subRowBlockArr = [];
-            if (row._children && row._children.length > 0) {
+            if (row._node && row._node._children && row._node._children.length > 0) {
 
-              row._children.forEach((childRow) => {
+              row._node._children.forEach((childRow) => {
 
                 // only display rows for the correct relationship
                 if ((relTypes && relTypes.indexOf(childRow.label) > -1) && (nodeTypes && nodeTypes.indexOf(childRow._node.labels[0]) > -1)) {
@@ -243,8 +237,8 @@ function buildReportTable(templateBlock, dataStore) {
                     content: [],
                   };
                   subcols.forEach((subCol) => {
-                   if (subCol.columns) {
-                      handleSubColumns(subCol.columns, childRow._node, subRowBlock, subCol.relationships, subCol.nodes);
+                    if (subCol.columns) {
+                      handleSubColumns(subCol.columns, childRow, subRowBlock, subCol.relationships, subCol.nodes);
                     } else {
                       const tdStyle = `width:${subCol.width}px;
                       min-width:${subCol.width}px;
@@ -258,10 +252,7 @@ function buildReportTable(templateBlock, dataStore) {
                   });
                   subRowBlockArr.push(subRowBlock)
                 }
-
               })
-
-
             } else {
               // fill empty cells
               const subRowBlock = {
@@ -271,7 +262,7 @@ function buildReportTable(templateBlock, dataStore) {
               };
               subcols.forEach((subCol) => {
                 if (subCol.columns) {
-                  handleSubColumns(subCol.columns, {}, subRowBlock, subCol.relationships, subCol.nodes);
+                  handleSubColumns(subCol.columns, { _node : {}}, subRowBlock, subCol.relationships, subCol.nodes);
                 } else {
                   const tdStyle = `width:${subCol.width}px;
                   min-width:${subCol.width}px;
@@ -333,11 +324,7 @@ function colspanCounter(columns) {
 function getTableMappedResult(dataStore, graphType, mapping, children = false) {
   let label;
   if (graphType === 'node') {
-    if (children) {
-      label = dataStore._node.labels[0];
-    } else {
-      label = dataStore.labels[0];
-    }
+    label = dataStore._node.labels[0];
   } else {
     label = dataStore.label;
   }
