@@ -182,7 +182,7 @@ function parseStructureElement(structureItem, store, n, level = 0) {
   })
 }
 
-function sortStore(nodes, ordering, level = 0) {
+function sortStore(nodes, ordering = [], level = 0) {
   if (ordering.length > 0) {
     if (level == 0) {
       nodes
