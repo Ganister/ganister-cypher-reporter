@@ -186,7 +186,6 @@ const fs = require('fs')
 
 test('Produce an HTML report', async () => {
   const report = await publisher.produce(dataStore, template);
-  console.log("LOG / file: publisher.test.js / line 170 / test / report", report);
   fs.writeFile("pubTest.html", report, 'utf8', function (err) {
   });
 });

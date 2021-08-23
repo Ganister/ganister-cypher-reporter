@@ -61,6 +61,14 @@ async function runQuery(query, cypherDriver) {
   }
 }
 
+
+/**
+ * 
+ * @param {*} structureItem item in the structure object provided
+ * @param {*} store store content
+ * @param {*} n 
+ * @param {*} level 
+ */
 function parseStructureElement(structureItem, store, n, level = 0) {
 
   structureItem.forEach((nodetype) => {
@@ -69,57 +77,82 @@ function parseStructureElement(structureItem, store, n, level = 0) {
       switch (obj.constructor.name) {
         case 'Path':
           let latestItem = store;
-          obj.segments.forEach((seg, index) => {
-            if (index == 0) {
-              seg.start._children = [];
-              seg.start._type = 'node';
-              if (level == 0) {
-                const objRetrieve = latestItem.find((itm) => itm.properties._id === seg.start.properties._id);
+          if (obj.segments.length == 0) {
+            obj.start._children = [];
+            obj.start._type = 'node';
+            if (level == 0) {
+              if (obj.start && obj.start.properties) {
+                const objRetrieve = latestItem.find((itm) => {
+                  return itm.properties._id === obj.start.properties._id
+                });
                 if (!objRetrieve) {
-                  latestItem.push(seg.start)
-                  latestItem = seg.start._children;
+                  latestItem.push(obj.start)
+                  latestItem = obj.start._children;
                 } else {
                   latestItem = objRetrieve._children;
                 }
+              }
+            } else {
+              // case path is not the first element in the structure
+              if (store._node && store._node.identity == obj.start.identity) {
               } else {
-                // case path is not the first element in the structure
-                if (store._node && store._node.identity == seg.start.identity) {
+                store._node = seg.start;
+                if (!obj.start._children) obj.start._children = [];
+                latestItem = obj.start._children;
+              }
+            }
+          } else {
+            obj.segments.forEach((seg, index) => {
+              if (index == 0) {
+                seg.start._children = [];
+                seg.start._type = 'node';
+                if (level == 0) {
+                  if (seg.start && seg.start.properties) {
+                    const objRetrieve = latestItem.find((itm) => {
+                      return itm.properties._id === seg.start.properties._id
+                    });
+                    if (!objRetrieve) {
+                      latestItem.push(seg.start)
+                      latestItem = seg.start._children;
+                    } else {
+                      latestItem = objRetrieve._children;
+                    }
+                  }
                 } else {
-                  store._node = seg.start;
-                  if (!seg.start._children) seg.start._children = [];
-                  latestItem = seg.start._children;
+                  // case path is not the first element in the structure
+                  if (store._node && store._node.identity == seg.start.identity) {
+                  } else {
+                    store._node = seg.start;
+                    if (!seg.start._children) seg.start._children = [];
+                    latestItem = seg.start._children;
+                  }
                 }
               }
-            }
 
-            let relRetrieve
-            relRetrieve = latestItem.find(edge => edge.identity === seg.relationship.identity)
-            if (!relRetrieve) {
-              const newRel = {
-                _type: 'relationship',
-                identity: seg.relationship.identity,
-                label: seg.relationship.type,
-                source: seg.start.identity,
-                target: seg.end.identity,
-                _edge: seg.relationship,
-                _node: seg.end,
+              let relRetrieve;
+              relRetrieve = latestItem.find(edge => edge.identity === seg.relationship.identity)
+              if (!relRetrieve) {
+                const newRel = {
+                  _type: 'relationship',
+                  identity: seg.relationship.identity,
+                  label: seg.relationship.type,
+                  source: seg.start.identity,
+                  target: seg.end.identity,
+                  _edge: seg.relationship,
+                  _node: seg.end,
+                }
+                newRel._node._children = [];
+                latestItem.push(newRel)
+                latestItem = newRel._node._children;
+              } else {
+                latestItem = relRetrieve._node._children;
               }
-              newRel._node._children = [];
-              latestItem.push(newRel)
-              latestItem = newRel._node._children;
-            } else {
-              latestItem = relRetrieve._node._children;
-            }
-            level++;
-
-          });
+              level++;
+            });
+          }
 
           parseStructureElement(nodetype.children, latestItem, n, level)
           break;
-
-
-
-
         case 'Relationship':
           // prevent duplicates
           const relRetrieve = store.find((itm) => itm.identity === obj.identity)
