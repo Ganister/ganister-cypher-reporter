@@ -175,6 +175,31 @@ function parseStructureElement(structureItem, store, n, level = 0) {
           level++;
           parseStructureElement(nodetype.children, subObj, n, level)
           break;
+        case 'Array':
+          // prevent duplicates
+          // let concatIds = obj.map(e => e.identity).join(",");
+          let concatIds = obj[0].start + ',' + obj[obj.length - 1].end;
+          const relArrayRetrieve = store.find((itm) => itm.identity === concatIds)
+          let subArrayObj;
+          if (relArrayRetrieve) {
+            subArrayObj = relArrayRetrieve;
+          } else {
+            subArrayObj = {
+              _type: 'relationship',
+              identity: concatIds,
+              label: obj[0].type,
+              source: obj[0].start,
+              target: obj[obj.length - 1].end,
+              _edge: obj,
+              _node: {}
+            }
+            subArrayObj._edge.label
+            store.push(subArrayObj);
+          }
+
+          level++;
+          parseStructureElement(nodetype.children, subArrayObj, n, level)
+          break;
         case 'Node':
           if (level == 0) {
             obj._children = [];
