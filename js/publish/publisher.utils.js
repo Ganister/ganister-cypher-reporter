@@ -1,3 +1,5 @@
+const dayjs = require('dayjs')
+
 /**
  * humanFileSize
  * transforms a byte size of file into human readable format
@@ -28,6 +30,7 @@ module.exports.humanFileSize = humanFileSize;
  * @param {*} type 
  */
 function formatValue(value, type) {
+  if (global.locale.split('-').length > 0) dayjs.locale(global.locale.split('-')[0]);
   let formattedValue = value;
   if (value && value != "") {
     switch (type) {
@@ -46,7 +49,7 @@ function formatValue(value, type) {
         }
         break;
       case 'date':
-        formattedValue = new Date(value).toLocaleDateString(global.locale);
+        formattedValue = dayjs(value).format('L');
         break;
       case 'boolean':
         if (!!JSON.parse(value)) {
@@ -75,7 +78,7 @@ module.exports.formatValue = formatValue;
  * @param {*} mapping 
  * @returns 
  */
- function resolveMapping(dataStore, mapping) {
+function resolveMapping(dataStore, mapping) {
 
   // check if data exists and if mapping exists
   if (!dataStore || mapping.length < 1) return null;
@@ -105,7 +108,7 @@ module.exports.resolveMapping = resolveMapping;
  * @param {*} datatype 
  * @returns 
  */
- function getMappedResult(dataStore, mapping, datatype) {
+function getMappedResult(dataStore, mapping, datatype) {
 
   // convert mapping into array
   const mappingArray = mapping.split('.');
