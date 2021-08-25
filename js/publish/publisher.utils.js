@@ -1,5 +1,9 @@
 const dayjs = require('dayjs')
-
+const localizedFormat = require('dayjs/plugin/localizedFormat')
+require('dayjs/locale/fr')
+require('dayjs/locale/de')
+require('dayjs/locale/en')
+dayjs.extend(localizedFormat)
 /**
  * humanFileSize
  * transforms a byte size of file into human readable format
@@ -30,7 +34,8 @@ module.exports.humanFileSize = humanFileSize;
  * @param {*} type 
  */
 function formatValue(value, type) {
-  if (global.locale.split('-').length > 0) dayjs.locale(global.locale.split('-')[0]);
+  console.log("LOG / file: publisher.utils.js / line 37 / formatValue / global.locale", global.locale);
+  if (global.locale && global.locale.split('-').length > 0) dayjs.locale(global.locale.split('-')[0]);
   let formattedValue = value;
   if (value && value != "") {
     switch (type) {
