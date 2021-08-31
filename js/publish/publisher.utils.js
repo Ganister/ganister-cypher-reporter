@@ -34,41 +34,44 @@ module.exports.humanFileSize = humanFileSize;
  * @param {*} type 
  */
 function formatValue(value, type) {
-  console.log("LOG / file: publisher.utils.js / line 37 / formatValue / global.locale", global.locale);
   if (global.locale && global.locale.split('-').length > 0) dayjs.locale(global.locale.split('-')[0]);
   let formattedValue = value;
-  if (value && value != "") {
-    switch (type) {
-      case 'float':
-        formattedValue = parseFloat(value);
-        break;
-      case 'integer':
-        formattedValue = parseInt(value);
-        break;
-      case 'string':
-        formattedValue = value;
-        break;
-      case 'filesize':
-        if (value) {
-          formattedValue = humanFileSize(value, true);
-        }
-        break;
-      case 'date':
-        formattedValue = dayjs(value).format('L');
-        break;
-      case 'boolean':
-        if (!!JSON.parse(value)) {
-          formattedValue = "✔️";
-        } else {
-          formattedValue = "❌";
-        }
-        break;
-      default:
-        formattedValue = value;
-        break;
-    }
+  if (type.type) {
+    formattedValue = global._dataConverters[type.type](value, type.options);
   } else {
-    formattedValue = " ";
+    if (value && value != "") {
+      switch (type) {
+        case 'float':
+          formattedValue = parseFloat(value);
+          break;
+        case 'integer':
+          formattedValue = parseInt(value);
+          break;
+        case 'string':
+          formattedValue = value;
+          break;
+        case 'filesize':
+          if (value) {
+            formattedValue = humanFileSize(value, true);
+          }
+          break;
+        case 'date':
+          formattedValue = dayjs(value).format('L');
+          break;
+        case 'boolean':
+          if (!!JSON.parse(value)) {
+            formattedValue = "✔️";
+          } else {
+            formattedValue = "❌";
+          }
+          break;
+        default:
+          formattedValue = value;
+          break;
+      }
+    } else {
+      formattedValue = " ";
+    }
   }
 
   return formattedValue;

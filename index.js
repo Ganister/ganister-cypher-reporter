@@ -46,22 +46,25 @@ const optionsSchema = Joi.object({
   }).required(),
   output: Joi.string().allow('pdf', 'html'),
   cypherDriver: Joi.object().required(),
+  dataConverters: Joi.object(),
 });
 
 
 async function buildReport(options) {
 
   const { error, value } = optionsSchema.validate(options);
-  if (error){
+  if (error) {
     console.log("LOG / file: index.js / line 55 / buildReport / error", error);
     return error;
-  } 
+  }
 
   // parse options
   console.time('[ganister-cypher-reporter] parse')
-  const { queries, template, output, cypherDriver } = options;
+  const { queries, template, output, cypherDriver, dataConverters } = options;
   console.timeEnd('[ganister-cypher-reporter] parse')
 
+  global._dataConverters = dataConverters;
+  
   // run queries
   console.time('[ganister-cypher-reporter] query')
   const dataStore = await cyq.runQueries(queries, cypherDriver);
