@@ -36,7 +36,7 @@ module.exports.humanFileSize = humanFileSize;
 function formatValue(value, type) {
   if (global.locale && global.locale.split('-').length > 0) dayjs.locale(global.locale.split('-')[0]);
   let formattedValue = value;
-  if (type.type) {
+  if (type && type.type) {
     formattedValue = global._dataConverters[type.type](value, type.options);
   } else {
     if (value && value != "") {
