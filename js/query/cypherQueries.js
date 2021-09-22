@@ -234,6 +234,37 @@ function parseStructureElement(structureItem, store, n, level = 0) {
         case 'String':
           values[key] = obj;
         default:
+          if (obj.gType) {
+            switch (obj.gType) {
+              case 'relationship':
+                // prevent duplicates
+                const relRetrieve = store.find((itm) => itm.identity === obj.identity)
+                let subObj;
+                if (relRetrieve) {
+                  subObj = relRetrieve;
+                } else {
+                  subObj = {
+                    _type: 'relationship',
+                    identity: obj.identity,
+                    label: obj.type,
+                    source: obj.start,
+                    target: obj.end,
+                    _edge: obj,
+                    _node: {}
+                  }
+                  store.push(subObj);
+                }
+
+                level++;
+                parseStructureElement(nodetype.children, subObj, n, level)
+                break;
+              case 'node':
+                console.log('not yet implemented');
+                break;
+              default:
+                break;
+            }
+          }
           break;
       }
     }
