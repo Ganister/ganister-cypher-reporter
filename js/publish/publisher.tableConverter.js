@@ -253,6 +253,32 @@ function buildReportTable(templateBlock, dataStore) {
                   subRowBlockArr.push(subRowBlock)
                 }
               })
+
+              // fill line if no record matched the relationships
+              if (subRowBlockArr.length < 1) {
+                const subRowBlock = {
+                  type: 'tr',
+                  attributes: { class: 'tr', id: 'null' },
+                  content: [],
+                };
+                subcols.forEach((subCol) => {
+                  if (subCol.columns) {
+                    handleSubColumns(subCol.columns, { _node: {} }, subRowBlock, subCol.relationships, subCol.nodes);
+                  } else {
+                    const tdStyle = `width:${subCol.width}px;
+                    min-width:${subCol.width}px;
+                    max-width: ${subCol.width}px;`
+                    subRowBlock.content.push({
+                      type: 'td',
+                      attributes: { class: 'td', field: subCol.label, style: tdStyle },
+                      content: ' ',
+                    });
+                  }
+                });
+                subRowBlockArr.push(subRowBlock)
+              }
+
+
             } else {
               // fill empty cells
               const subRowBlock = {
@@ -262,7 +288,7 @@ function buildReportTable(templateBlock, dataStore) {
               };
               subcols.forEach((subCol) => {
                 if (subCol.columns) {
-                  handleSubColumns(subCol.columns, { _node : {}}, subRowBlock, subCol.relationships, subCol.nodes);
+                  handleSubColumns(subCol.columns, { _node: {} }, subRowBlock, subCol.relationships, subCol.nodes);
                 } else {
                   const tdStyle = `width:${subCol.width}px;
                   min-width:${subCol.width}px;
