@@ -307,8 +307,8 @@ function sortStore(nodes, ordering = [], level = 0) {
         .sort((a, b) => {
           return a.label.localeCompare(b.label);
         })
-      ordering.forEach((ord) => {=
-        nodes.sort((a, b) => {=
+      ordering.forEach((ord) => {
+        nodes.sort((a, b) => {
           let aLabel = a.label;
           let bLabel = b.label;
           if (ord.graphType === "node") {
