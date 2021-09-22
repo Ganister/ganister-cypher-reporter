@@ -281,10 +281,17 @@ function sortStore(nodes, ordering = [], level = 0) {
         })
       ordering.forEach((ord) => {
         nodes.sort((a, b) => {
-          if (a.labels[0] == b.labels[0] == ord.type) {
-            const un = resolveMapping(a, ord.prop);
-            const deux = resolveMapping(b, ord.prop);
-            return un.localeCompare(deux);
+          if (a.labels[0] == ord.type && b.labels[0] == ord.type) {
+            switch (ord.compareType) {
+              case 'integer':
+                const integ_un = resolveMapping(a, ord.prop.split('.'));
+                const integ_deux = resolveMapping(b, ord.prop.split('.'));
+                return parseInt(integ_un || '0') - parseInt(integ_deux || '0');
+              default:
+                const un = resolveMapping(a, ord.prop);
+                const deux = resolveMapping(b, ord.prop);
+                return un.localeCompare(deux);
+            }
           }
         })
       })
