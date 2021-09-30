@@ -29,6 +29,17 @@ function humanFileSize(bytes, si) {
 module.exports.humanFileSize = humanFileSize;
 
 /**
+ * styleToString
+ */
+function styleToString(style) {
+  return Object.keys(style).reduce((acc, key) => (
+    acc + key.split(/(?=[A-Z])/).join('-').toLowerCase() + ':' + style[key] + ';'
+  ), '');
+};
+
+module.exports.styleToString = styleToString;
+
+/**
  * formatValue
  * @param {*} value 
  * @param {*} type 

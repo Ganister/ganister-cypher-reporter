@@ -38,8 +38,10 @@ const optionsSchema = Joi.object({
         relationships: Joi.array(),
         nodes: Joi.array(),
         columns: Joi.array().items(Joi.link('#column')),
-        css: Joi.object(),
+        style: Joi.object(), // cell style
+        css: Joi.object(), // header style
       }).id('column')),
+      style: Joi.object(), // cell style
       width: Joi.string().allow('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'),
       title: Joi.string(),
     })),

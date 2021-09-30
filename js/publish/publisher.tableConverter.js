@@ -1,5 +1,5 @@
 
-const { resolveMapping, formatValue } = require('./publisher.utils')
+const { resolveMapping, formatValue, styleToString } = require('./publisher.utils')
 
 const fs = require('fs');
 /**
@@ -265,9 +265,13 @@ function buildReportTable(templateBlock, dataStore) {
                   if (subCol.columns) {
                     handleSubColumns(subCol.columns, { _node: {} }, subRowBlock, subCol.relationships, subCol.nodes);
                   } else {
-                    const tdStyle = `width:${subCol.width}px;
+                    let tdStyle = `width:${subCol.width}px;
                     min-width:${subCol.width}px;
                     max-width: ${subCol.width}px;`
+                    if (subCol.style) {
+                      tdStyle = tdStyle + styleToString(style);
+                    }
+
                     subRowBlock.content.push({
                       type: 'td',
                       attributes: { class: 'td', field: subCol.label, style: tdStyle },

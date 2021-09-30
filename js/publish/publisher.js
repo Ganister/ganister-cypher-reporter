@@ -1,6 +1,6 @@
 const htmlCreator = require('html-creator');
 const { htmlStyle } = require('./publisher.styles')
-const { resolveMapping, getMappedResult } = require('./publisher.utils')
+const { resolveMapping, getMappedResult, styleToString } = require('./publisher.utils')
 const { buildReportTable } = require('./publisher.tableConverter')
 global.locale = "fr-FR";
 
@@ -35,7 +35,7 @@ async function produce(dataStore, template) {
   }
 
   // initialize body
-  const reportHeader = buildReportHeader(template.author, reportLabel[global.locale],template.name );
+  const reportHeader = buildReportHeader(template.author, reportLabel[global.locale], template.name);
   const body = {
     type: 'body',
     attributes: {
@@ -92,6 +92,10 @@ async function produce(dataStore, template) {
  * @returns 
  */
 function buildReportField(templateBlock, dataStore) {
+  let tdStyle = '';
+  if (templateBlock.style) {
+    tdStyle = tdStyle + styleToString(templateBlock.style);
+  }
   const fieldContent = [
     {
       type: 'h6',
@@ -101,7 +105,7 @@ function buildReportField(templateBlock, dataStore) {
     {
       type: 'h5',
       content: getMappedResult(dataStore, templateBlock.mapping),
-      attributes: { class: `dataField` },
+      attributes: { class: `dataField`, style: tdStyle },
     },
   ];
   return fieldContent;
