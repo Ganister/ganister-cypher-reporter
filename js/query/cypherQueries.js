@@ -288,8 +288,8 @@ function sortStore(nodes, ordering = [], level = 0) {
                 const integ_deux = resolveMapping(b, ord.prop.split('.'));
                 return parseInt(integ_un || '0') - parseInt(integ_deux || '0');
               default:
-                const un = resolveMapping(a, ord.prop);
-                const deux = resolveMapping(b, ord.prop);
+                const un = resolveMapping(a, ord.prop.split('.'));
+                const deux = resolveMapping(b, ord.prop.split('.'));
                 return un.localeCompare(deux);
             }
           }
