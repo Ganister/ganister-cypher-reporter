@@ -1,3 +1,6 @@
+
+const fs = require('fs')
+
 const publisher = require('./publisher');
 const { dataStore } = require('./published.sampleData');
 const template = {
@@ -133,59 +136,9 @@ const template = {
   ]
 };
 
-test('Recursive Test 1', async () => {
-  const dataSet = {
-    a: {
-      b: 1,
-      c: {
-        d: 2,
-        e: {
-          f: 3,
-          g: {
-            h: 4
-          }
-        }
-      }
-    },
-    i: 5,
-  }
-  expect(publisher.resolveMapping(dataSet, ['a', 'b', 'c', 'd'])).toBe(null);
-  expect(publisher.resolveMapping(dataSet, ['a', 'c', 'd'])).toBe(2);
-  expect(publisher.resolveMapping(dataSet, ['a', 'b'])).toBe(1);
-  expect(publisher.resolveMapping(dataSet, ['i'])).toBe(5);
-
-});
-
-
-
-
-test('Recursive Test 2', async () => {
-  const dataSet = {
-    a: {
-      b: 1,
-      c: {
-        d: 2,
-        e: {
-          f: 3,
-          g: {
-            h: 4
-          }
-        }
-      }
-    },
-    i: 5,
-  }
-  expect(publisher.getMappedResult(dataSet, 'a.b.c.d')).toBe(" ");
-  expect(publisher.getMappedResult(dataSet, 'a.c.d')).toBe(2);
-  expect(publisher.getMappedResult(dataSet, 'a.b')).toBe(1);
-  expect(publisher.getMappedResult(dataSet, 'i')).toBe(5);
-  expect(publisher.getMappedResult(dataSet, 'h')).toBe(" ");
-
-});
-const fs = require('fs')
 
 test('Produce an HTML report', async () => {
   const report = await publisher.produce(dataStore, template);
-  fs.writeFile("pubTest.html", report, 'utf8', function (err) {
+  fs.writeFile("temp/pubTest.html", report, 'utf8', function (err) {
   });
 });

@@ -71,15 +71,25 @@ const optionsSchema = Joi.object({
   queries: Joi.array().required().items(Joi.object({
     id: Joi.string().required(),
     query: Joi.string().required(),
+    ordering: Joi.array(),
+    structure: Joi.array().items(Joi.object({
+      identifier: Joi.string(),
+      children: Joi.array().items(Joi.object({
+        identifier: Joi.string(),
+        pick: Joi.string().allow('last', 'path'),
+        children: Joi.array().items(Joi.link('#structureNodeType')),
+      })),
+    }).id('structureNodeType')),
   })),
   template: Joi.object({
     name: Joi.string().required(),
     locale: Joi.string().required(),
+    indentationColumns: Joi.number(),
     author: Joi.string().required(),
     items: Joi.array().items(Joi.object({
       id: Joi.number().required(),
       type: Joi.string().allow('field', 'table', 'graph').required(),
-      datatype :Joi.string(),
+      datatype: Joi.string(),
       mapping: Joi.string(),
       inlineRelationships: Joi.array().items(Joi.string()),
       columns: Joi.array().items(Joi.object({
@@ -87,23 +97,47 @@ const optionsSchema = Joi.object({
         indentation: Joi.boolean(),
         fields: Joi.object(),
         label: Joi.string(),
+        category: Joi.string(),
         width: Joi.number(),
+        relationships: Joi.array(),
+        nodes: Joi.array(),
         columns: Joi.array().items(Joi.link('#column')),
+        style: Joi.object(), // cell style
+        css: Joi.object(), // header style
       }).id('column')),
-      width: Joi.string().allow('1', '2', '3', '4', '5', '6'),
+      style: Joi.object(), // cell style
+      width: Joi.string().allow('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'),
       title: Joi.string(),
     })),
-  }),
+  }).required(),
   output: Joi.string().allow('pdf', 'html'),
-  cypherDriver: Joi.object(),
+  cypherDriver: Joi.object().required(),
+  dataConverters: Joi.object(),
 });
 ```
+#### Template item properties
+|  Parameters | Explanation  |  
+|---|---|
 
+#### Column properties
 |  Parameters | Explanation  |  
 |---|---|
 | inlineRelationships |  In the report template you can define an array of relationships which will be handled as inlineRelationships in a table. If true, whenever such relationship is met, the children of these relationships will appear in a cell to the right of their parent node. If False, then for each child a new row is appended under the parent row.| 
-|   |   | 
+|  graphType *(string)*| "node" | 
+|  indentation *(boolean)* | defines if this is the indentation column. You can have only one indentation column | 
+|  fields *(object)* |  | 
+|  label *(string)* |  | 
+|  category *(string)* |  | 
+|  width *(number)* |  | 
+|  relationships *(array)* |  | 
+|  nodes *(array)* |  | 
+|  columns *(array(column))* |  | 
+|  style *(array)* | intable cell style | 
+|  css *(array)* |  header style| 
 
+#### Field properties
+|  Parameters | Explanation  |  
+|---|---|
 
 
 ### Output
@@ -130,6 +164,14 @@ Each cypher query object has the following schema:
   Joi.object({
     id: Joi.string().required(),
     query: Joi.string().required(),
+    ordering: Joi.array(),
+    structure: Joi.array().items(Joi.object({
+      identifier: Joi.string(),
+      children: Joi.array().items(Joi.object({
+        identifier: Joi.string(),
+        children: Joi.array().items(Joi.link('#structureNodeType')),
+      })),
+    }).id('structureNodeType')),
   })
 ```
 The queries are run by the file cypherQueries.js. They are run asynchronously. Their result is stored in a dataStore variable when all the promise resolve.

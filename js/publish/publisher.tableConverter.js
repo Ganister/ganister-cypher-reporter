@@ -269,7 +269,7 @@ function buildReportTable(templateBlock, dataStore) {
                     min-width:${subCol.width}px;
                     max-width: ${subCol.width}px;`
                     if (subCol.style) {
-                      tdStyle = tdStyle + styleToString(style);
+                      tdStyle = tdStyle + styleToString(subCol.style);
                     }
 
                     subRowBlock.content.push({
@@ -351,10 +351,14 @@ function colspanCounter(columns) {
  * @param {*} children 
  * @returns 
  */
-function getTableMappedResult(dataStore, graphType, mapping, children = false) {
+function getTableMappedResult(dataStore, graphType, mapping) {
   let label;
   if (graphType === 'node') {
-    label = dataStore._node.labels[0];
+    if (dataStore._node) {
+      label = dataStore._node.labels[0];
+    } else {
+      label = ' ';
+    }
   } else {
     label = dataStore.label;
   }
