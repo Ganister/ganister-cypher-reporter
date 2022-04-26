@@ -5,21 +5,52 @@ const queries = [
   {
     id: 'docs',
     query: `MATCH (d:document) 
-    OPTIONAL MATCH (d)-[]->(f:file) 
+    OPTIONAL MATCH (d)-[df]->(f:file) 
     OPTIONAL MATCH (d)<-[r]-(p:part) 
-    RETURN d as documents, f as files, r as docparts, p as parts ORDER BY documents._createdOn`,
+    RETURN d as documents,df, f as files, r as docparts, p as parts ORDER BY documents._createdOn`,
+    ordering: [],
+    structure: [
+      {
+        identifier: "documents",
+        children: [
+          {
+            identifier: "df",
+            children: [
+              {
+                identifier: "files",
+                children: [],
+              }
+            ],
+          }, {
+            identifier: "docparts",
+            children: [
+              {
+                identifier: "parts",
+                children: [],
+              }
+            ],
+          }
+        ],
+      }
+    ]
   },
   {
     id: 'partCount',
     query: `MATCH (a:part) WHERE NOT(a)<-[:revises]-() RETURN COUNT(a) as partCount`,
+    ordering: [],
+    structure: []
   },
   {
     id: 'userCount',
     query: `MATCH (a:user) RETURN COUNT(a) as userCount`,
+    ordering: [],
+    structure: []
   },
   {
     id: 'documentCount',
     query: `MATCH (a:document) WHERE NOT(a)<-[:revises]-() RETURN COUNT(a) as documentCount`,
+    ordering: [],
+    structure: []
   },
   {
     id: 'partBom',
@@ -27,6 +58,33 @@ const queries = [
             OPTIONAL MATCH (items)-[rel]->(docs:document)
             OPTIONAL MATCH (docs)-[rel2]->(f:file)
             RETURN p,rel,docs,rel2,f`,
+    ordering: [],
+    structure: [
+      {
+        identifier: "p",
+        children: [
+          {
+            identifier: "relf",
+            children: [
+              {
+                identifier: "docs",
+                children: [
+                  {
+                    identifier: "rel2",
+                    children: [
+                      {
+                        identifier: "f",
+                        children: [],
+                      }
+                    ],
+                  }
+                ],
+              }
+            ],
+          },
+        ],
+      }
+    ]
   }
 ];
 
@@ -44,7 +102,7 @@ const driver = neo4j.driver(db.boltURL, neo4j.auth.basic(
 
 const template = {
   name: 'test template',
-  locale : "fr-FR",
+  locale: "fr-FR",
   author: 'Yoann Maingon',
   items: [
     {

@@ -55,7 +55,6 @@ async function runQuery(query, cypherDriver) {
     await session.close();
     return content;
   } catch (error) {
-    console.error("LOG / file: cypherQueries.js / line 71 / runQuery / error", error);
     await session.close();
     return content;
   }

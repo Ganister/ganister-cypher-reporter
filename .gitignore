@@ -103,7 +103,10 @@ dist
 # TernJS port file
 .tern-port
 
+#.vscode files
+.vscode
+
 out/
 internalTest/
-
+temp/
 index.html
