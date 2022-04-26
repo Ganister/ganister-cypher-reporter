@@ -76,6 +76,7 @@ const optionsSchema = Joi.object({
       identifier: Joi.string(),
       children: Joi.array().items(Joi.object({
         identifier: Joi.string(),
+        pick: Joi.string().allow('last', 'path'),
         children: Joi.array().items(Joi.link('#structureNodeType')),
       })),
     }).id('structureNodeType')),
