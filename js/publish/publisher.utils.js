@@ -50,6 +50,7 @@ function formatValue(value = " ", type) {
   if (type && type.type) {
     formattedValue = global._dataConverters[type.type](value, type.options);
   } else {
+    if (value !== null && value !== undefined) {
       switch (type) {
         case 'float':
           formattedValue = parseFloat(value);
@@ -61,9 +62,7 @@ function formatValue(value = " ", type) {
           formattedValue = value.toString();
           break;
         case 'filesize':
-          if (value) {
             formattedValue = humanFileSize(value, true);
-          }
           break;
         case 'date':
           formattedValue = dayjs(value).format('L');
@@ -79,6 +78,7 @@ function formatValue(value = " ", type) {
           formattedValue = value;
           break;
       }
+    }
   }
   if (formattedValue === null || formattedValue === undefined || formattedValue === "") {
     formattedValue = " ";
