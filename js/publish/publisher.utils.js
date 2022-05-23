@@ -44,12 +44,13 @@ module.exports.styleToString = styleToString;
  * @param {*} value 
  * @param {*} type 
  */
-function formatValue(value = " ", type) {
+function formatValue(value = " ", type, TZ = 'Europe/Paris') {
   if (global.locale && global.locale.split('-').length > 0) dayjs.locale(global.locale.split('-')[0]);
   let formattedValue = value;
   if (type && type.type) {
     formattedValue = global._dataConverters[type.type](value, type.options);
   } else {
+    if (value !== null && value !== undefined) {
       switch (type) {
         case 'float':
           formattedValue = parseFloat(value);
@@ -61,12 +62,10 @@ function formatValue(value = " ", type) {
           formattedValue = value.toString();
           break;
         case 'filesize':
-          if (value) {
-            formattedValue = humanFileSize(value, true);
-          }
+          formattedValue = humanFileSize(value, true);
           break;
         case 'date':
-          formattedValue = dayjs(value).format('L');
+          formattedValue = dayjs(value).tz(TZ).format('L');
           break;
         case 'boolean':
           if (!!(value) && value !== 'false') {
@@ -79,6 +78,7 @@ function formatValue(value = " ", type) {
           formattedValue = value;
           break;
       }
+    }
   }
   if (formattedValue === null || formattedValue === undefined || formattedValue === "") {
     formattedValue = " ";
