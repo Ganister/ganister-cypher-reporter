@@ -44,7 +44,7 @@ module.exports.styleToString = styleToString;
  * @param {*} value 
  * @param {*} type 
  */
-function formatValue(value = " ", type) {
+function formatValue(value = " ", type, TZ = 'Europe/Paris') {
   if (global.locale && global.locale.split('-').length > 0) dayjs.locale(global.locale.split('-')[0]);
   let formattedValue = value;
   if (type && type.type) {
@@ -62,10 +62,10 @@ function formatValue(value = " ", type) {
           formattedValue = value.toString();
           break;
         case 'filesize':
-            formattedValue = humanFileSize(value, true);
+          formattedValue = humanFileSize(value, true);
           break;
         case 'date':
-          formattedValue = dayjs(value).format('L');
+          formattedValue = dayjs(value).tz(TZ).format('L');
           break;
         case 'boolean':
           if (!!(value) && value !== 'false') {
