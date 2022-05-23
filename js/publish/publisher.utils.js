@@ -3,7 +3,11 @@ const localizedFormat = require('dayjs/plugin/localizedFormat')
 require('dayjs/locale/fr')
 require('dayjs/locale/de')
 require('dayjs/locale/en')
+const utc = require('dayjs/plugin/utc')
+const timezone = require('dayjs/plugin/timezone') // dependent on utc plugin
 dayjs.extend(localizedFormat)
+dayjs.extend(utc)
+dayjs.extend(timezone)
 /**
  * humanFileSize
  * transforms a byte size of file into human readable format
