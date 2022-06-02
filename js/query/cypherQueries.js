@@ -84,7 +84,7 @@ function parseStructureElement(structureItem, store, n, level = 0) {
 
         // case PATH
         case 'Path':
-          let latestItem = store;
+          let latestItem = [store];
           const pathPickType = nodetype.pick;
 
           switch (pathPickType) {
