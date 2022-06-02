@@ -193,7 +193,7 @@ function buildReportBlock(templateBlock, dataStore) {
 
     case 'container':
       htmlBlock.type = 'div';
-      htmlBlock.attributes = { id: templateBlock.id, class: `row` };
+      htmlBlock.attributes = { id: templateBlock.id, class: `col s${templateBlock.width}` };
       htmlBlock.content = templateBlock.items.map((item) => buildReportBlock(item, dataStore))
       break;
 
