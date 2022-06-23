@@ -104,7 +104,7 @@ function buildReportField(templateBlock, dataStore) {
     },
     {
       type: 'h5',
-      content: getMappedResult(dataStore, templateBlock.mapping),
+      content: getMappedResult(dataStore, templateBlock.mapping, templateBlock.datatype),
       attributes: { class: `dataField`, style: tdStyle },
     },
   ];
