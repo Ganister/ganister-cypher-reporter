@@ -25,7 +25,7 @@ const optionsSchema = Joi.object({
     author: Joi.string().required(),
     items: Joi.array().items(Joi.object({
       id: Joi.number().required(),
-      type: Joi.string().allow('field', 'table', 'graph').required(),
+      type: Joi.string().allow('field', 'table', 'graph', 'container').required(),
       datatype: Joi.string(),
       mapping: Joi.string(),
       inlineRelationships: Joi.array().items(Joi.string()),
@@ -42,10 +42,11 @@ const optionsSchema = Joi.object({
         style: Joi.object(), // cell style
         css: Joi.object(), // header style
       }).id('column')),
+      items: Joi.array().items(Joi.link('#item')),
       style: Joi.object(), // cell style
       width: Joi.string().allow('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'),
       title: Joi.string(),
-    })),
+    }).id('item'))
   }).required(),
   output: Joi.string().allow('pdf', 'html'),
   cypherDriver: Joi.object().required(),
