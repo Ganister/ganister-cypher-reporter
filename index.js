@@ -27,9 +27,11 @@ const optionsSchema = Joi.object({
       id: Joi.number().required(),
       type: Joi.string().allow('field', 'table', 'graph', 'container').required(),
       datatype: Joi.string(),
+      datatypeObj: Joi.object(),
       mapping: Joi.string(),
       inlineRelationships: Joi.array().items(Joi.string()),
       columns: Joi.array().items(Joi.object({
+        groupTo:Joi.string().allow('min', 'max'),
         graphType: Joi.string(),
         indentation: Joi.boolean(),
         fields: Joi.object(),

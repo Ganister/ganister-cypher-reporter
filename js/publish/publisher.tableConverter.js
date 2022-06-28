@@ -33,6 +33,8 @@ function convertStoreToTableRows(dataStoreElement, templateBlock) {
       tableRows.push(value);
     }
 
+
+
     // Browse relationships
     rowRecursiveHandler(value, 0, templateBlock, tableRows);
 
@@ -174,7 +176,10 @@ function buildReportTable(templateBlock, dataStore) {
   // Add Data
   const tableRows = convertStoreToTableRows(dataStore[templateBlock.mapping], templateBlock)
 
+
+
   if (tableRows) {
+
     tableRows.forEach((tableRow) => {
       const rowBlock = {
         type: 'tr',
@@ -227,31 +232,70 @@ function buildReportTable(templateBlock, dataStore) {
             const subRowBlockArr = [];
             if (row._node && row._node._children && row._node._children.length > 0) {
 
-              row._node._children.forEach((childRow) => {
+              let rows = row._node._children;
+              rows = rows.filter((row) => {
+                return (relTypes && relTypes.indexOf(row.label) > -1) && (nodeTypes && nodeTypes.indexOf(row._node.labels[0]) > -1);
+              })
+
+              // find grouping
+              subcols.forEach((col) => {
+                if (col.groupTo) {
+                  switch (col.groupTo) {
+                    case 'min':
+                      let resu = rows.map((a) => getTableMappedResult(a, col.graphType, col.fields, true))
+                      // filter table rows by min value
+                      rows.sort((a, b) => {
+                        const vala = getTableMappedResult(a, col.graphType, col.fields, true);
+                        const valb = getTableMappedResult(b, col.graphType, col.fields, true);
+                        return vala.localeCompare(valb);
+                      });
+                      resu = rows.map((a) => getTableMappedResult(a, col.graphType, col.fields, true))
+                      // remove all but first value tableRows collection
+                      rows.splice(1, rows.length - 1);
+                      break;
+                    case 'max':
+                      // filter table rows by max value
+                      let res = rows.map((a) => getTableMappedResult(a, col.graphType, col.fields, true))
+                      rows.sort((a, b) => {
+                        const vala = getTableMappedResult(a, col.graphType, col.fields, true);
+                        const valb = getTableMappedResult(b, col.graphType, col.fields, true);
+                        return valb.localeCompare(vala);
+                      });
+
+                      res = rows.map((a) => getTableMappedResult(a, col.graphType, col.fields, true))
+                      // keep first value of tableRows collection
+                      rows.splice(1, rows.length - 1,);
+                      break;
+                  }
+                }
+              });
+
+
+              rows.forEach((childRow) => {
 
                 // only display rows for the correct relationship
-                if ((relTypes && relTypes.indexOf(childRow.label) > -1) && (nodeTypes && nodeTypes.indexOf(childRow._node.labels[0]) > -1)) {
-                  const subRowBlock = {
-                    type: 'tr',
-                    attributes: { class: 'tr', id: childRow._node.identity },
-                    content: [],
-                  };
-                  subcols.forEach((subCol) => {
-                    if (subCol.columns) {
-                      handleSubColumns(subCol.columns, childRow, subRowBlock, subCol.relationships, subCol.nodes);
-                    } else {
-                      const tdStyle = `width:${subCol.width}px;
+
+                const subRowBlock = {
+                  type: 'tr',
+                  attributes: { class: 'tr', id: childRow._node.identity },
+                  content: [],
+                };
+                subcols.forEach((subCol) => {
+                  if (subCol.columns) {
+                    handleSubColumns(subCol.columns, childRow, subRowBlock, subCol.relationships, subCol.nodes);
+                  } else {
+                    const tdStyle = `width:${subCol.width}px;
                       min-width:${subCol.width}px;
                       max-width: ${subCol.width}px;`
-                      subRowBlock.content.push({
-                        type: 'td',
-                        attributes: { class: 'td', field: subCol.label, style: tdStyle },
-                        content: '' + getTableMappedResult(childRow, subCol.graphType, subCol.fields, true) + ' ',
-                      });
-                    }
-                  });
-                  subRowBlockArr.push(subRowBlock)
-                }
+                    subRowBlock.content.push({
+                      type: 'td',
+                      attributes: { class: 'td', field: subCol.label, style: tdStyle },
+                      content: '' + getTableMappedResult(childRow, subCol.graphType, subCol.fields, true) + ' ',
+                    });
+                  }
+                });
+                subRowBlockArr.push(subRowBlock)
+
               })
 
               // fill line if no record matched the relationships
@@ -281,8 +325,6 @@ function buildReportTable(templateBlock, dataStore) {
                 });
                 subRowBlockArr.push(subRowBlock)
               }
-
-
             } else {
               // fill empty cells
               const subRowBlock = {
