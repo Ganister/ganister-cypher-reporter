@@ -353,7 +353,7 @@ function sortStore(nodes, ordering = [], level = 0) {
               default:
                 const un = resolveMapping(a, ord.prop.split('.'));
                 const deux = resolveMapping(b, ord.prop.split('.'));
-                return un.localeCompare(deux);
+                return ord.direction*un.localeCompare(deux);
             }
           }
         })
@@ -383,9 +383,9 @@ function sortStore(nodes, ordering = [], level = 0) {
             const deux = resolveMapping(b, ord.prop.split('.'));
             switch (ord.compareType) {
               case 'integer':
-                return parseInt(un) - parseInt(deux);
+                return ord.direction*(parseInt(un) - parseInt(deux));
               default:
-                return un.localeCompare(deux);
+                return ord.direction*un.localeCompare(deux);
             }
           }
         })
